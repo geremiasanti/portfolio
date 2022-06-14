@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page %}
+<script src="https://cdn.jsdelivr.net/npm/p5@1.3.0/lib/p5.js"></script>
+<script>
+console.log('hei');
+/* web workers test */
+populateWW = new Worker('{% static '/js/populateFieldWebWorker.js' %}');
+setInterval(function() {
+    populateWW.postMessage({});
+    populateWW.onmessage = function(e) {
+        console.log(e.data);
+    };
+}, 100);
+</script>
+{% endblock %}

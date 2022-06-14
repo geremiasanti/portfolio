@@ -1,0 +1,4 @@
+start_dev_server.sh
+db.sqlite3
+portfolio/settings.py
+**/__pycache__/**

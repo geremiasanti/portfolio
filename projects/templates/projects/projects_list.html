@@ -1,0 +1,59 @@
+<!--TODO toggle a:hover animations on dom ready-->
+{% extends "base_content.html" %}
+
+{% block extra_style %}
+.projects_list {
+    column-count: 3;
+    list-style-type: none;
+    counter-set: projects -1;
+}
+.project {
+    counter-increment: projects;
+}
+.project:before {
+    color: {{ color_text_1 }};
+}
+.project:nth-child(n):before {
+    content: "00" counter(projects) " ";
+}
+.project:nth-child(n+11):before {
+    content: "0" counter(projects) " ";
+}
+{% endblock %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block extra_script %}
+function resize_list_if_overflows() {
+    const current_column_count = $('#projects_list').css('column-count');
+    if(current_column_count > 1) {
+        if( $('.project')[0].scrollWidth > $('.project').innerWidth() ) {
+            $("#projects_list").css({
+                'column-count': current_column_count-1,
+            });
+        }
+    }
+    if(current_column_count > 1) {
+    }
+}
+$(document).ready(function() {
+    /* Handling list column-count, it start at 3 and it diminish if a column 
+       overlaps the other. */
+    resize_list_if_overflows();
+    $(window).resize(function(){ resize_list_if_overflows() });
+});
+{% endblock %}
+
+{% block content %}
+<ul class="projects_list list-unstyled" id="projects_list">    
+{% for key, project in projects.items %}
+    <li class="project list-item text-nowrap">
+        <a class="hover-underline-only" href={% url 'show_project' project.id %}>
+            {{ project.readable }}
+        </a>
+    </li> 
+{% endfor %}
+</ul>
+{% endblock %}

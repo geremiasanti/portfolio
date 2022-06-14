@@ -1,0 +1,20 @@
+{% extends "base_content.html" %}
+
+{% block extra_script %}
+function align_list_with_subtitle() {
+    const extra_padding = $('#header').width() - $('#page_title').width();
+    $('.site_section').css( 'padding-left', extra_padding + 'px' );
+}
+$(document).ready(function() {
+    align_list_with_subtitle();
+    $(window).resize(function(){ align_list_with_subtitle() });
+});
+{% endblock %}
+{% block content %}
+<div class="site_section">
+    <h3><a href="{% url 'list_projects' %}" class="secondary_text_color">/ projects</a></h3>
+</div>
+<div class="site_section">
+    <h3><a href="#" class="secondary_text_color">/ me</a></h3>
+</div>
+{% endblock %}

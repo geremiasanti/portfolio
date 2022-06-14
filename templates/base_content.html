@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block page %}
+<div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-9 col-lg-7">
+            <h3 style="display: inline-block;" id="header">
+                <a href="{% url 'index' %}">Geremia Santi</a>
+                {% if page_title %}
+                <a href="#" class="secondary_text_color" id="page_title">/ {{ page_title }}</a>
+                {% endif %}
+            </h3>
+            <br>
+            {% if description %}
+            <p class="drop_cap" id="description">{{ description }}</p>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
