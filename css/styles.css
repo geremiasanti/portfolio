@@ -5,15 +5,19 @@
     font-family: 'JetBrains Mono', monospace;
 }
 
-body {
+html, body {
     height: 100%;
-    width: 100%;
 }
 
+/* title - inverted background colors */
+.title-background {
+    background-image: url(../resources/media/shark.jpg);
+}
 .title {
-    font-size: 40vh;
+    font-size: 25vh;
     background-image: url(../resources/media/shark.jpg);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
+    filter: invert(1);
 }
