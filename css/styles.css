@@ -1,0 +1,19 @@
+/* FONTS */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+
+* {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+}
+
+.title {
+    font-size: 40vh;
+    background-image: url(../resources/media/shark.jpg);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
