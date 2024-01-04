@@ -11,11 +11,17 @@ html, body {
 
 /* title - inverted background colors */
 .background {
+    /* test alignment 
     background-image: url(../resources/media/shark.jpg);
+    */
+    background-image: url(../resources/media/placeholder.jpg);
 }
 .text-inverted-colors {
-    /* clip image to text */
+    /* test alignment 
     background-image: url(../resources/media/shark.jpg);
+    */
+    background-image: url(../resources/media/placeholder.jpg);
+    /* clip background-image to text */
     background-clip: text; -webkit-background-clip: text;
     color: transparent;
     /* invert colors */
