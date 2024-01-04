@@ -10,14 +10,14 @@ html, body {
 }
 
 /* title - inverted background colors */
-.title-background {
+.background {
     background-image: url(../resources/media/shark.jpg);
 }
-.title {
-    font-size: 25vh;
+.text-inverted-colors {
+    /* clip image to text */
     background-image: url(../resources/media/shark.jpg);
-    background-clip: text;
-    -webkit-background-clip: text;
+    background-clip: text; -webkit-background-clip: text;
     color: transparent;
+    /* invert colors */
     filter: invert(1);
 }
