@@ -38,7 +38,11 @@ html, body {
     filter: invert(1);
 }
 
-.main-title {
+.title{
 /* typography */
-    font-size: 20vh
+    font-size: 8vw
+}
+.sections {
+/* typography */
+    font-size: 5vw
 }
