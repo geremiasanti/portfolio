@@ -36,7 +36,9 @@ html, body {
     color: transparent;
 /* invert colors */
     filter: invert(1);
+}
 
+.main-title {
 /* typography */
     font-size: 20vh
 }
