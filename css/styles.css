@@ -12,15 +12,15 @@ html, body {
 /* title - inverted background colors */
 .background {
     /* test alignment 
-    background-image: url(../resources/media/shark.jpg);
-    */
     background-image: url(../resources/media/placeholder.jpg);
+    */
+    background-image: url(../resources/media/shark.jpg);
 }
 .text-inverted-colors {
     /* test alignment 
-    background-image: url(../resources/media/shark.jpg);
-    */
     background-image: url(../resources/media/placeholder.jpg);
+    */
+    background-image: url(../resources/media/shark.jpg);
     /* clip background-image to text */
     background-clip: text; -webkit-background-clip: text;
     color: transparent;
