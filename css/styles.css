@@ -8,41 +8,21 @@ html, body {
     height: 100%;
 }
 
-/* title - inverted background colors */
 .background {
-/* background image */
-    /* test alignment 
-    background-image: url(../resources/media/placeholder.jpg);
-    */
     background-image: url(../resources/media/shark.jpg);
-
-/* background properties */
     background-repeat: no-repeat;
     background-size: cover;
 }
-.text-inverted-colors {
-/* background image */
-    /* test alignment 
-    background-image: url(../resources/media/placeholder.jpg);
-    */
-    background-image: url(../resources/media/shark.jpg);
 
-/* background properties */
-    background-repeat: no-repeat;
-    background-size: cover;
-
-/* clip background-image to text */
-    background-clip: text; -webkit-background-clip: text;
-    color: transparent;
-/* invert colors */
-    filter: invert(1);
+.invert-colors {
+    color: white;
+    mix-blend-mode: difference;
 }
 
-.title{
-/* typography */
+.title {
     font-size: 8vw
 }
+
 .sections {
-/* typography */
     font-size: 5vw
 }
