@@ -9,7 +9,9 @@ html, body {
 }
 
 .background {
+    /*
     background-image: url(../resources/media/shark.jpg);
+    */
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -25,4 +27,16 @@ html, body {
 
 .sections {
     font-size: 5vw
+}
+
+.cache {
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    z-index: -1;
+}
+
+.cache img {
+    position: absolute;
+    top: 0;
 }
