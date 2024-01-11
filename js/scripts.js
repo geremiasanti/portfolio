@@ -1,13 +1,18 @@
 const imageUrls = [
-    '../resources/media/basking-sharkfactsshutterstock_524750362.jpg',
-    '../resources/media/pexels-egor-kamelev-921878.jpg',
-    '../resources/media/pexels-jan-venter-6477293.jpg',
-    '../resources/media/pexels-juan-j-moralestrejo-6047668.jpg',
-    '../resources/media/pexels-volker-thimm-19745508.jpg',
-    '../resources/media/placeholder.jpg',
-    '../resources/media/plippiploppi.webp',
-    '../resources/media/shark.jpg',
-    '../resources/media/whaleshark.jpeg',
+    '../resources/media/raccoons/pexels-alexas-fotos-10767665.jpg',
+    '../resources/media/raccoons/pexels-andrey-yudkin-9179705.jpg',
+    '../resources/media/raccoons/pexels-anna-hinckel-5873489_5_11zon.jpg',
+    '../resources/media/raccoons/pexels-david-selbert-6468064.jpg',
+    '../resources/media/raccoons/pexels-david-selbert-6482720.jpg',
+    '../resources/media/raccoons/pexels-david-selbert-7465116_2_11zon.jpg',
+    '../resources/media/raccoons/pexels-david-selbert-7515370.jpg',
+    '../resources/media/raccoons/pexels-david-selbert-8810621_1_11zon.jpg',
+    '../resources/media/raccoons/pexels-pixabay-54602.jpg',
+    '../resources/media/raccoons/pexels-thomas-shockey-14575912_4_11zon.jpg',
+    '../resources/media/raccoons/pexels-tina-nord-7049866_3_11zon.jpg',
+    '../resources/media/raccoons/pexels-vadim-braydov-12221953_6_11zon.jpg',
+    '../resources/media/raccoons/pexels-volker-thimm-19745509.jpg',
+    '../resources/media/raccoons/pexels-zoosnow-5826510.jpg',
 ];
 
 $(document).ready(function() {
@@ -34,7 +39,7 @@ function preloadImages($imageCache, imageUrls) {
 }
 
 function initGlitchImagesOnHover($hoverElement, $background, images) {
-    let timeoutMs = 100;
+    let timeoutMs = 200;
     let hovering = false;
 
     let imageCursor = 0;
