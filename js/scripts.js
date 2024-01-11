@@ -1,12 +1,13 @@
+const IMAGE_URLS = [
+    '../resources/media/shark.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Raccoon_in_Central_Park_(35264).jpg/1200px-Raccoon_in_Central_Park_(35264).jpg',
+];
+
 $(document).ready(function() {
     // needed to istantiate images (otherwhise not loaded until shown)
     let $imageCache = $('<div class="cache" />').appendTo('body');    
 
-    let imageUrls = [
-        '../resources/media/shark.jpg',
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Raccoon_in_Central_Park_(35264).jpg/1200px-Raccoon_in_Central_Park_(35264).jpg',
-    ];
-    let images = preloadImages($imageCache, imageUrls);
+    let images = preloadImages($imageCache, IMAGE_URLS);
     initGlitchImagesOnHover(
         $('.glitch-images-on-hover'), 
         $('#background'), 
