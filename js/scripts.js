@@ -1,5 +1,3 @@
-const TIMEOUT = 250;
-
 $(document).ready(function() {
     // needed to istantiate images (otherwhise not loaded until shown)
     let $imageCache = $('<div class="cache" />').appendTo('body');    
@@ -9,7 +7,11 @@ $(document).ready(function() {
         'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Raccoon_in_Central_Park_(35264).jpg/1200px-Raccoon_in_Central_Park_(35264).jpg',
     ];
     let images = preloadImages($imageCache, imageUrls);
-    initGlitchImagesOnHover(images);
+    initGlitchImagesOnHover(
+        $('.glitch-images-on-hover'), 
+        $('#background'), 
+        images
+    );
 });
 
 function preloadImages($imageCache, imageUrls) {
@@ -23,19 +25,30 @@ function preloadImages($imageCache, imageUrls) {
     return images;
 }
 
-function initGlitchImagesOnHover(images) {
+function initGlitchImagesOnHover($hoverElement, $background, images) {
+    let timeoutMs = 100;
     let hovering = false;
+
+    let imageCursor = 0;
+    let imageCount = images.length
 
     // loop
     window.setInterval(function () {
-        if (hovering) {
-            console.log('hovering'); 
-            // TODO: change background
+        if(hovering) {
+            // update background
+            $background.css("background-image",
+                `url('${images[imageCursor].attr('src')}')`
+            );
+
+            // update cursor
+            imageCursor++;
+            if(imageCursor >= imageCount) 
+                imageCursor = 0;
         }
-    }, TIMEOUT);
+    }, timeoutMs);
 
     // loop activation or pause
-    $('.glitch-images-on-hover').hover(
+    $hoverElement.hover(
         () => {
             hovering = true; 
         }, () => {

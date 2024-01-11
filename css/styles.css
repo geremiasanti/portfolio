@@ -8,10 +8,8 @@ html, body {
     height: 100%;
 }
 
-.background {
-    /*
+#background {
     background-image: url(../resources/media/shark.jpg);
-    */
     background-repeat: no-repeat;
     background-size: cover;
 }
