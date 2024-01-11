@@ -1,13 +1,20 @@
-const IMAGE_URLS = [
+const imageUrls = [
+    '../resources/media/basking-sharkfactsshutterstock_524750362.jpg',
+    '../resources/media/pexels-egor-kamelev-921878.jpg',
+    '../resources/media/pexels-jan-venter-6477293.jpg',
+    '../resources/media/pexels-juan-j-moralestrejo-6047668.jpg',
+    '../resources/media/pexels-volker-thimm-19745508.jpg',
+    '../resources/media/placeholder.jpg',
+    '../resources/media/plippiploppi.webp',
     '../resources/media/shark.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Raccoon_in_Central_Park_(35264).jpg/1200px-Raccoon_in_Central_Park_(35264).jpg',
+    '../resources/media/whaleshark.jpeg',
 ];
 
 $(document).ready(function() {
     // needed to istantiate images (otherwhise not loaded until shown)
     let $imageCache = $('<div class="cache" />').appendTo('body');    
 
-    let images = preloadImages($imageCache, IMAGE_URLS);
+    let images = preloadImages($imageCache, imageUrls);
     initGlitchImagesOnHover(
         $('.glitch-images-on-hover'), 
         $('#background'), 
@@ -43,8 +50,10 @@ function initGlitchImagesOnHover($hoverElement, $background, images) {
 
             // update cursor
             imageCursor++;
-            if(imageCursor >= imageCount) 
+            if(imageCursor >= imageCount) {
                 imageCursor = 0;
+                images.sort(() => Math.random() - 0.5);
+            }
         }
     }, timeoutMs);
 
