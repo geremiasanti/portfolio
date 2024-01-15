@@ -56,7 +56,7 @@ const getResolution = function() {
 };
 /* get the iso-value */
 const getTreshold = function() {
-    return 0.5;
+    return 0.6;
 };
 /* the size of the edge of the imaginary cell 
 (distance between cell's corners) */
@@ -72,10 +72,10 @@ const getRows = function() {
     return Math.trunc( $(window).height() / getCellSize() ) + 2; 
 };
 const getPointSize = function() {
-    return getCellSize() * 0.15;
+    return getCellSize() * .15;
 };
 const getLineSize = function() {
-    return getCellSize() * 0.05;
+    return getCellSize() * .15;
 };
 const getDrawDots = function() {
     return false;
@@ -140,7 +140,7 @@ const populateFields = function(field_float, field_bool) {
             if(true) {
                 cellCenterPx = getCellCenter(col, row); 
                 mouseCellDistance = dist(mouseX, mouseY, cellCenterPx[0], cellCenterPx[1]);
-                    if(mouseCellDistance < 200) {
+                    if(mouseCellDistance < 100) {
                     field_float[i] = 1;
                     field_bool[i] = 1;
                 }
@@ -279,7 +279,7 @@ function draw() {
 
             if(getDrawDots()) {
                 strokeWeight(getPointSize());
-                switch(dotsGetFloatOrBool()) {
+                switch('bool') {
                     case 'bool':
                         stroke(255 * cellValue_bool);
                         break;
@@ -300,7 +300,7 @@ function draw() {
             }
             
             if(getDrawLines()) {
-                stroke(0);
+                stroke(255);
                 strokeWeight(getLineSize()); 
                 drawLines(col, row, field_midpoints_copy[col][row]);
             }
