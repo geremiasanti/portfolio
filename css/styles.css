@@ -14,13 +14,13 @@ html, body {
     background-position: center;
 }
 
-.invert-colors {
+.invert-colors .title, .invert-colors .link {
     color: white;
     mix-blend-mode: difference;
 }
 
 .title {
-    font-size: 8vw
+    font-size: 8vw;
 }
 
 .sections {
