@@ -22,7 +22,7 @@ $(document).ready(function() {
     let images = preloadImages($imageCache, imageUrls);
     initGlitchImagesOnHover(
         $('.glitch-images-on-hover'), 
-        $('#background'), 
+        $('#background-for-images'), 
         images
     );
 });
