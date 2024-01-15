@@ -230,7 +230,6 @@ const drawLines = function(col, row, cellMidpoints) {
 
 function setup() {
     createCanvas($(window).width(), $(window).height(), P2D, document.getElementById('p5canvas'));
-    //createCanvas(w, h, [renderer], [canvas])
     
     /* istantiating empty field */
     field_float = new Float32Array(getCols() * getRows());
@@ -309,7 +308,7 @@ function draw() {
     }
     
     // TESTONLY
-    // noLoop();
+    //noLoop();
 } 
 
 
