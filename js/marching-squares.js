@@ -42,69 +42,39 @@
 */
 
 
-// 2d array containing float values between 0 and 1 
-var field_float;
-var field_bool;
-var field_midpoints;
-var t = 0;
+let field_float;
+let field_bool;
+let field_midpoints;
+let t = 0;
 
 
-const getResolution = function() {
-    return 70;
-};
-// get the iso-value
-const getTreshold = function() {
-    return 0.6;
-};
-// the size of the edge of the imaginary cell (distance between cell's corners)
-const getCellSize = function() {
-    return $(window).width() / (getResolution() - 1);
-};
-// how many cols and rows have to be drawn (e.g. on resize cols number change)
-const getCols = function() {
-    return getResolution();
-};
-const getRows = function() {
-    return Math.trunc( $(window).height() / getCellSize() ) + 2; 
-};
-const getPointSize = function() {
-    return getCellSize() * .15;
-};
-const getLineSize = function() {
-    return getCellSize() * .15;
-};
-const getDrawDots = function() {
-    return false;
-};
-// draw iso-lines */
-const getDrawLines = function() {
-    return true;
-};
-const getType = function() {
-    return 'float';
-};
-const populateGetNoise = function() {
-    return 'p5_basic';
-};
+const RESOLUTION = 100;
+const TRESHOLD = 0.65;
+let cellSize = $(window).width() / (RESOLUTION - 1);
+const COLS = RESOLUTION;
+let rows = Math.trunc( $(window).height() / cellSize ) + 2; 
+let pointSize = cellSize * .3;
+let lineSize = cellSize * .15;
+let drawDots = false;
+let whichNoise = 'p5_basic';
 
 
 const getCellCenter = function(col, row) {
-    return [(col + 0.5) * getCellSize(), (row + 0.5) * getCellSize()];
+    return [(col + 0.5) * cellSize, (row + 0.5) * cellSize];
 };
 
 const getIndex = function(col, row) {
-    return col + row * getCols();
+    return col + row * COLS;
 };
 
 // put new values in the fields
 const populateFields = function(field_float, field_bool) {
     let value, cellCenterPx, mouseCellDistance; 
-    let whichNoise = populateGetNoise();
-    let xInc = 0.3;
-    let yInc = 0.3;
+    let xInc = 0.1;
+    let yInc = 0.1;
     let zInc = 0.1;
-    for(let col = 0; col < getCols(); col++) {
-        for(let row = 0; row < getRows(); row++) {
+    for(let col = 0; col < COLS; col++) {
+        for(let row = 0; row < rows; row++) {
             let i = getIndex(col, row);
             switch(whichNoise) {
                case 'random':
@@ -117,7 +87,7 @@ const populateFields = function(field_float, field_bool) {
             
             field_float[i] = value;
             
-            if(value >= getTreshold()) {
+            if(value >= TRESHOLD) {
                 field_bool[i] = 1;
             } else {
                 field_bool[i] = 0;
@@ -217,16 +187,16 @@ const drawLines = function(col, row, cellMidpoints) {
 function setup() {
     // canvas
     createCanvas($(window).width(), $(window).height(), P2D, document.getElementById('p5canvas'));
+    let cellSize = $(window).width() / (RESOLUTION - 1);
     
     // fields 
-    field_float = new Float32Array(getCols() * getRows());
-    field_bool = new Int8Array(getCols() * getRows());
+    field_float = new Float32Array(COLS * rows);
+    field_bool = new Int8Array(COLS * rows);
 
     // calculating every cell's midpoints positions
-    field_midpoints = Array(getCols()).fill().map(() => Array(getRows()));
-    let cellSize = getCellSize();
-    for(let col = 0; col < getCols(); col++) {
-        for(let row = 0; row < getRows(); row++) {
+    field_midpoints = Array(COLS).fill().map(() => Array(rows));
+    for(let col = 0; col < COLS; col++) {
+        for(let row = 0; row < rows; row++) {
             let xa = (col + 0.5) * cellSize; 
             let ya = row * cellSize;
             let xb = (col + 1) * cellSize; 
@@ -253,10 +223,9 @@ function draw() {
     clear();
     t++;
     
-    let resolution = getResolution();
-    let cellSize = getCellSize();
-    let cols = getCols();
-    let rows = getRows();
+    let resolution = RESOLUTION;
+    let cols = COLS;
+    //let rows = rows;
     let field_midpoints_copy = field_midpoints;
 
     populated = populateFields(field_float, field_bool);
@@ -270,9 +239,9 @@ function draw() {
             let cellValue_float = field_float[i];
             let cellValue_bool = field_bool[i];
 
-            if(getDrawDots()) {
-                strokeWeight(getPointSize());
-                switch('bool') {
+            if(drawDots) {
+                strokeWeight(pointSize);
+                switch('float') {
                     case 'bool':
                         stroke(255 * cellValue_bool);
                         break;
@@ -288,15 +257,14 @@ function draw() {
                are just the last drawn edges; the last cell instead will be 
                delimited by the last col and the one before (same for the 
                rows) */
-            if(col > getCols()-2 || row > getRows()-2) {
+            if(col > COLS-2 || row > rows-2) {
                 continue;
             }
             
-            if(getDrawLines()) {
-                stroke(0);
-                strokeWeight(getLineSize()); 
-                drawLines(col, row, field_midpoints_copy[col][row]);
-            }
+            // lines
+            stroke(0);
+            strokeWeight(lineSize); 
+            drawLines(col, row, field_midpoints_copy[col][row]);
         }
     }
 } 
