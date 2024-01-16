@@ -8,18 +8,12 @@ html, body {
     height: 100%;
 }
 
-#background-for-images {
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-}
-
 #p5canvas {
     position: absolute;
     top: 0;
 }
 
-.invert-colors .title, .invert-colors .link {
+.invert-colors {
     color: white;
     mix-blend-mode: difference;
 }
@@ -28,19 +22,7 @@ html, body {
     font-size: 8vw;
 }
 
-.sections {
-    font-size: 5vw
-}
-
-.cache {
-    position: absolute;
-    top: 0;
-    opacity: 0;
-    z-index: -1;
-}
-
-.cache img {
-    position: absolute;
-    top: 0;
-    width: 100%;
+.link {
+    font-size: 5vw;
+    color: white;
 }

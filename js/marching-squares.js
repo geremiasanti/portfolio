@@ -103,14 +103,6 @@ const getIndex = function(col, row) {
 
 /* put new values in the fields */
 const populateFields = function(field_float, field_bool) {
-    //TESTONLY
-    /*
-    let field_float_copy = new Float32Array(field_float.length);
-    let field_bool_copy = new Uint8Array(field_bool.length);
-    field_float_copy.set(field_float);
-    field_bool_copy.set(field_bool);
-    */
-
     let value, cellCenterPx, mouseCellDistance; 
     let whichNoise = populateGetNoise();
     let xInc = 0.3;
@@ -151,10 +143,9 @@ const populateFields = function(field_float, field_bool) {
 };
 
 
-/* this will return the cell corners as a 4 bit number */
+// return the cell corners as a 4 bit number as string
 const getCellStatus = function(col, row) {
     let out = '';
-    /* I don't want more nested loops */
     out += str( field_bool[getIndex(col, row)] ); //up left corner
     out += str( field_bool[getIndex(col+1, row)] ); //up right corner
     out += str( field_bool[getIndex(col+1, row+1)] ); //down right corner
@@ -229,14 +220,15 @@ const drawLines = function(col, row, cellMidpoints) {
 
 
 function setup() {
+    // canvas
     createCanvas($(window).width(), $(window).height(), P2D, document.getElementById('p5canvas'));
     
-    /* istantiating empty field */
+    // istantiating empty field
     field_float = new Float32Array(getCols() * getRows());
     field_bool = new Int8Array(getCols() * getRows());
     field_midpoints = Array(getCols()).fill().map(() => Array(getRows()));
 
-    /* calculating every cell's midpoints positions */
+    // calculating every cell's midpoints positions
     let cellSize = getCellSize();
     for(let col = 0; col < getCols(); col++) {
         for(let row = 0; row < getRows(); row++) {
@@ -251,6 +243,15 @@ function setup() {
             field_midpoints[col][row] = {xa: xa, ya: ya, xb: xb, yb: yb, xc: xc, yc: yc, xd: xd, yd: yd};
         }
     }
+
+    // display and loop only on hover
+    $('.link').hover(
+        () => {
+            loop();
+        }, () => {
+            noLoop();
+    });
+    noLoop();
 }
 
 
@@ -300,15 +301,12 @@ function draw() {
             }
             
             if(getDrawLines()) {
-                stroke(255);
+                stroke(0);
                 strokeWeight(getLineSize()); 
                 drawLines(col, row, field_midpoints_copy[col][row]);
             }
         }
     }
-    
-    // TESTONLY
-    //noLoop();
 } 
 
 
