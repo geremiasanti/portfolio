@@ -1,4 +1,4 @@
-/*
+/* EXPLANATION
 -field: 2d array containing float values from 0 to 1 
 -how is field drawn: 
     I'm thinking of the field's values as corners of the cells we are drawing.
@@ -42,29 +42,25 @@
 */
 
 
-/* GLOBAL VARIABLES */
-/* 2d array containing float values between 0 and 1 */
+// 2d array containing float values between 0 and 1 
 var field_float;
 var field_bool;
 var field_midpoints;
 var t = 0;
 
 
-/* PARAMETERS */
 const getResolution = function() {
     return 70;
 };
-/* get the iso-value */
+// get the iso-value
 const getTreshold = function() {
     return 0.6;
 };
-/* the size of the edge of the imaginary cell 
-(distance between cell's corners) */
+// the size of the edge of the imaginary cell (distance between cell's corners)
 const getCellSize = function() {
     return $(window).width() / (getResolution() - 1);
 };
-/* how many cols and rows have to be drawn 
-(e.g. on resize cols number change) */
+// how many cols and rows have to be drawn (e.g. on resize cols number change)
 const getCols = function() {
     return getResolution();
 };
@@ -80,7 +76,7 @@ const getLineSize = function() {
 const getDrawDots = function() {
     return false;
 };
-/* draw iso-lines */
+// draw iso-lines */
 const getDrawLines = function() {
     return true;
 };
@@ -92,7 +88,6 @@ const populateGetNoise = function() {
 };
 
 
-/* FUNCTIONS */
 const getCellCenter = function(col, row) {
     return [(col + 0.5) * getCellSize(), (row + 0.5) * getCellSize()];
 };
@@ -101,7 +96,7 @@ const getIndex = function(col, row) {
     return col + row * getCols();
 };
 
-/* put new values in the fields */
+// put new values in the fields
 const populateFields = function(field_float, field_bool) {
     let value, cellCenterPx, mouseCellDistance; 
     let whichNoise = populateGetNoise();
@@ -128,7 +123,7 @@ const populateFields = function(field_float, field_bool) {
                 field_bool[i] = 0;
             }
 
-            /* mouse shit */
+            // mouse shit
             if(true) {
                 cellCenterPx = getCellCenter(col, row); 
                 mouseCellDistance = dist(mouseX, mouseY, cellCenterPx[0], cellCenterPx[1]);
@@ -223,12 +218,12 @@ function setup() {
     // canvas
     createCanvas($(window).width(), $(window).height(), P2D, document.getElementById('p5canvas'));
     
-    // istantiating empty field
+    // fields 
     field_float = new Float32Array(getCols() * getRows());
     field_bool = new Int8Array(getCols() * getRows());
-    field_midpoints = Array(getCols()).fill().map(() => Array(getRows()));
 
     // calculating every cell's midpoints positions
+    field_midpoints = Array(getCols()).fill().map(() => Array(getRows()));
     let cellSize = getCellSize();
     for(let col = 0; col < getCols(); col++) {
         for(let row = 0; row < getRows(); row++) {
@@ -245,20 +240,17 @@ function setup() {
     }
 
     // display and loop only on hover
-    $('.link').hover(
-        () => {
-            loop();
-        }, () => {
-            noLoop();
+    $('.link').hover(() => {
+        loop();
+    }, () => {
+        noLoop();
     });
     noLoop();
 }
 
 
 function draw() {                      
-    /* clear the canvas every frame */
     clear();
-    /* incrementing t at every frame*/
     t++;
     
     let resolution = getResolution();
@@ -271,7 +263,7 @@ function draw() {
     field_float = populated[0];
     field_bool = populated[1];
 
-    /* main loop, processes every cell */
+    // main loop, processes every cell
     for(let col = 0; col < cols; col++) {
         for(let row = 0; row < rows; row++) {
             let i = getIndex(col, row);
@@ -316,7 +308,7 @@ $(window).resize(function() {
 });
 
 
-/* maintenence */
+// maintenence
 setInterval(function() {
     console.log(frameRate());
 }, 1000);
