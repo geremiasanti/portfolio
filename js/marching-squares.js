@@ -48,23 +48,22 @@ let field_midpoints;
 let t = 0;
 
 
-const RESOLUTION = 100;
-const TRESHOLD = 0.65;
-let cellSize = $(window).width() / (RESOLUTION - 1);
-const COLS = RESOLUTION;
+let resolution = 100;
+let treshold = 0.65;
+let cellSize = $(window).width() / (resolution - 1);
+let cols = resolution;
 let rows = Math.trunc( $(window).height() / cellSize ) + 2; 
 let pointSize = cellSize * .3;
 let lineSize = cellSize * .15;
 let drawDots = false;
 let whichNoise = 'p5_basic';
 
-
 const getCellCenter = function(col, row) {
     return [(col + 0.5) * cellSize, (row + 0.5) * cellSize];
 };
 
 const getIndex = function(col, row) {
-    return col + row * COLS;
+    return col + row * cols;
 };
 
 // put new values in the fields
@@ -73,7 +72,7 @@ const populateFields = function(field_float, field_bool) {
     let xInc = 0.1;
     let yInc = 0.1;
     let zInc = 0.1;
-    for(let col = 0; col < COLS; col++) {
+    for(let col = 0; col < cols; col++) {
         for(let row = 0; row < rows; row++) {
             let i = getIndex(col, row);
             switch(whichNoise) {
@@ -87,7 +86,7 @@ const populateFields = function(field_float, field_bool) {
             
             field_float[i] = value;
             
-            if(value >= TRESHOLD) {
+            if(value >= treshold) {
                 field_bool[i] = 1;
             } else {
                 field_bool[i] = 0;
@@ -187,15 +186,15 @@ const drawLines = function(col, row, cellMidpoints) {
 function setup() {
     // canvas
     createCanvas($(window).width(), $(window).height(), P2D, document.getElementById('p5canvas'));
-    let cellSize = $(window).width() / (RESOLUTION - 1);
+    let cellSize = $(window).width() / (resolution - 1);
     
     // fields 
-    field_float = new Float32Array(COLS * rows);
-    field_bool = new Int8Array(COLS * rows);
+    field_float = new Float32Array(cols * rows);
+    field_bool = new Int8Array(cols * rows);
 
     // calculating every cell's midpoints positions
-    field_midpoints = Array(COLS).fill().map(() => Array(rows));
-    for(let col = 0; col < COLS; col++) {
+    field_midpoints = Array(cols).fill().map(() => Array(rows));
+    for(let col = 0; col < cols; col++) {
         for(let row = 0; row < rows; row++) {
             let xa = (col + 0.5) * cellSize; 
             let ya = row * cellSize;
@@ -223,14 +222,7 @@ function draw() {
     clear();
     t++;
     
-    let resolution = RESOLUTION;
-    let cols = COLS;
-    //let rows = rows;
-    let field_midpoints_copy = field_midpoints;
-
-    populated = populateFields(field_float, field_bool);
-    field_float = populated[0];
-    field_bool = populated[1];
+    [field_float, field_bool] = populateFields(field_float, field_bool);
 
     // main loop, processes every cell
     for(let col = 0; col < cols; col++) {
@@ -257,14 +249,14 @@ function draw() {
                are just the last drawn edges; the last cell instead will be 
                delimited by the last col and the one before (same for the 
                rows) */
-            if(col > COLS-2 || row > rows-2) {
+            if(col > cols-2 || row > rows-2) {
                 continue;
             }
             
             // lines
             stroke(0);
             strokeWeight(lineSize); 
-            drawLines(col, row, field_midpoints_copy[col][row]);
+            drawLines(col, row, field_midpoints[col][row]);
         }
     }
 } 
