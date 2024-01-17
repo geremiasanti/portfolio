@@ -42,12 +42,7 @@
 */
 
 
-let field_float;
-let field_bool;
-let field_midpoints;
-let t = 0;
-
-
+// params 
 let resolution = 100;
 let treshold = 0.65;
 let cellSize = $(window).width() / (resolution - 1);
@@ -58,129 +53,22 @@ let lineSize = cellSize * .15;
 let drawDots = false;
 let whichNoise = 'p5_basic';
 
-const getCellCenter = function(col, row) {
-    return [(col + 0.5) * cellSize, (row + 0.5) * cellSize];
-};
-
-const getIndex = function(col, row) {
-    return col + row * cols;
-};
-
-// put new values in the fields
-const populateFields = function(field_float, field_bool) {
-    let value, cellCenterPx, mouseCellDistance; 
-    let xInc = 0.1;
-    let yInc = 0.1;
-    let zInc = 0.1;
-    for(let col = 0; col < cols; col++) {
-        for(let row = 0; row < rows; row++) {
-            let i = getIndex(col, row);
-            switch(whichNoise) {
-               case 'random':
-                    value = Math.random();
-                    break;
-               case 'p5_basic':
-                    value = noise(xInc * col, yInc * row, zInc * t);
-                    break;
-            }
-            
-            field_float[i] = value;
-            
-            if(value >= treshold) {
-                field_bool[i] = 1;
-            } else {
-                field_bool[i] = 0;
-            }
-
-            // mouse shit
-            if(true) {
-                cellCenterPx = getCellCenter(col, row); 
-                mouseCellDistance = dist(mouseX, mouseY, cellCenterPx[0], cellCenterPx[1]);
-                    if(mouseCellDistance < 100) {
-                    field_float[i] = 1;
-                    field_bool[i] = 1;
-                }
-            }
-        }
-    }
-    return [field_float, field_bool];
-};
+// variables
+let field_float;
+let field_bool;
+let field_midpoints;
+let t = 0;
 
 
-// return the cell corners as a 4 bit number as string
-const getCellStatus = function(col, row) {
-    let out = '';
-    out += str( field_bool[getIndex(col, row)] ); //up left corner
-    out += str( field_bool[getIndex(col+1, row)] ); //up right corner
-    out += str( field_bool[getIndex(col+1, row+1)] ); //down right corner
-    out += str( field_bool[getIndex(col, row+1)] ); //down left corner
-    return out;
-};
-
-
-const drawLines = function(col, row, cellMidpoints) {
-    let cellStatus = getCellStatus(col, row);
-
-    /* I did the evaluation in this way because:
-       -if there are 0 or 4 ones i don't have to draw nothing
-       -if there are 1 or 3 ones i just have to put a single line
-           -if there is only 1 one i put the line around that corner 
-           -if there is only 1 zero i put the line around that corner 
-       -if there are 2 ones i need to evaluate further
-           -if those corners are on the same edge I draw one of the two possible 
-            lines that split the cell in half.
-           -if the 2 ones are on opposite corners I have to draw two lines that 
-            isolates those corners, each of the ones will be isolated */
-    let ones = (cellStatus.match(/1/g) || []).length;
-    if (ones == 0 || ones == 4) {
-        return;
-    } else if(ones == 2) {
-        if(cellStatus === '0110' || cellStatus === '1001') {
-            /* AC */
-            line(cellMidpoints.xa, cellMidpoints.ya, cellMidpoints.xc, cellMidpoints.yc);
-        } else if(cellStatus === '1100' || cellStatus === '0011') {
-            /* BD */
-            line(cellMidpoints.xb, cellMidpoints.yb, cellMidpoints.xd, cellMidpoints.yd);
-        } else if(cellStatus == '0101') {
-            /* AB and CD */ 
-            line(cellMidpoints.xa, cellMidpoints.ya, cellMidpoints.xb, cellMidpoints.yb);
-            line(cellMidpoints.xc, cellMidpoints.yc, cellMidpoints.xd, cellMidpoints.yd);
-        } else if(cellStatus == '1010') {
-            /* AD and BC */ 
-            line(cellMidpoints.xa, cellMidpoints.ya, cellMidpoints.xd, cellMidpoints.yd);
-            line(cellMidpoints.xb, cellMidpoints.yb, cellMidpoints.xc, cellMidpoints.yc);
-        }
-    } else {
-        /* if there is only 1 one I will draw the line that isolates that 
-           corner, else if there are 3 ones I will draw the line that isolates
-           the only zero */
-        let searchFor;
-        if(ones == 1) {
-            searchFor = '1';
-        } else /* ones == 3 */ { 
-            searchFor = '0';
-        }
-        /* in which position is the only one (or the only zero) */
-        switch(cellStatus.indexOf(searchFor)) {
-            case 0:
-                /* AD */
-                line(cellMidpoints.xa, cellMidpoints.ya, cellMidpoints.xd, cellMidpoints.yd);
-                break;
-            case 1:
-                /* AB */
-                line(cellMidpoints.xa, cellMidpoints.ya, cellMidpoints.xb, cellMidpoints.yb);
-                break;
-            case 2:
-                /* BC */
-                line(cellMidpoints.xb, cellMidpoints.yb, cellMidpoints.xc, cellMidpoints.yc);
-                break;
-            case 3:
-                /* CD */
-                line(cellMidpoints.xc, cellMidpoints.yc, cellMidpoints.xd, cellMidpoints.yd);
-                break;
-        }
-    }
-};
+$(document).ready(function() {
+    $(window).resize(function() { 
+        setup();
+        draw();
+    });
+    setInterval(function() {
+        console.log(frameRate());
+    }, 1000);
+})
 
 
 function setup() {
@@ -261,14 +149,128 @@ function draw() {
     }
 } 
 
+// put new values in the fields
+function populateFields(field_float, field_bool) {
+    let value, cellCenterPx, mouseCellDistance; 
+    let xInc = 0.1;
+    let yInc = 0.1;
+    let zInc = 0.1;
+    for(let col = 0; col < cols; col++) {
+        for(let row = 0; row < rows; row++) {
+            let i = getIndex(col, row);
+            switch(whichNoise) {
+               case 'random':
+                    value = Math.random();
+                    break;
+               case 'p5_basic':
+                    value = noise(xInc * col, yInc * row, zInc * t);
+                    break;
+            }
+            
+            field_float[i] = value;
+            
+            if(value >= treshold) {
+                field_bool[i] = 1;
+            } else {
+                field_bool[i] = 0;
+            }
 
-$(window).resize(function() { 
-    setup();
-    draw();
-});
+            // mouse shit
+            if(true) {
+                cellCenterPx = getCellCenter(col, row); 
+                mouseCellDistance = dist(mouseX, mouseY, cellCenterPx[0], cellCenterPx[1]);
+                    if(mouseCellDistance < 100) {
+                    field_float[i] = 1;
+                    field_bool[i] = 1;
+                }
+            }
+        }
+    }
+    return [field_float, field_bool];
+};
 
 
-// maintenence
-setInterval(function() {
-    console.log(frameRate());
-}, 1000);
+function drawLines(col, row, cellMidpoints) {
+    let cellStatus = getCellStatus(col, row);
+
+    /* I did the evaluation in this way because:
+       -if there are 0 or 4 ones i don't have to draw nothing
+       -if there are 1 or 3 ones i just have to put a single line
+           -if there is only 1 one i put the line around that corner 
+           -if there is only 1 zero i put the line around that corner 
+       -if there are 2 ones i need to evaluate further
+           -if those corners are on the same edge I draw one of the two possible 
+            lines that split the cell in half.
+           -if the 2 ones are on opposite corners I have to draw two lines that 
+            isolates those corners, each of the ones will be isolated */
+    let ones = (cellStatus.match(/1/g) || []).length;
+    if (ones == 0 || ones == 4) {
+        return;
+    } else if(ones == 2) {
+        if(cellStatus === '0110' || cellStatus === '1001') {
+            /* AC */
+            line(cellMidpoints.xa, cellMidpoints.ya, cellMidpoints.xc, cellMidpoints.yc);
+        } else if(cellStatus === '1100' || cellStatus === '0011') {
+            /* BD */
+            line(cellMidpoints.xb, cellMidpoints.yb, cellMidpoints.xd, cellMidpoints.yd);
+        } else if(cellStatus == '0101') {
+            /* AB and CD */ 
+            line(cellMidpoints.xa, cellMidpoints.ya, cellMidpoints.xb, cellMidpoints.yb);
+            line(cellMidpoints.xc, cellMidpoints.yc, cellMidpoints.xd, cellMidpoints.yd);
+        } else if(cellStatus == '1010') {
+            /* AD and BC */ 
+            line(cellMidpoints.xa, cellMidpoints.ya, cellMidpoints.xd, cellMidpoints.yd);
+            line(cellMidpoints.xb, cellMidpoints.yb, cellMidpoints.xc, cellMidpoints.yc);
+        }
+    } else {
+        /* if there is only 1 one I will draw the line that isolates that 
+           corner, else if there are 3 ones I will draw the line that isolates
+           the only zero */
+        let searchFor;
+        if(ones == 1) {
+            searchFor = '1';
+        } else /* ones == 3 */ { 
+            searchFor = '0';
+        }
+        /* in which position is the only one (or the only zero) */
+        switch(cellStatus.indexOf(searchFor)) {
+            case 0:
+                /* AD */
+                line(cellMidpoints.xa, cellMidpoints.ya, cellMidpoints.xd, cellMidpoints.yd);
+                break;
+            case 1:
+                /* AB */
+                line(cellMidpoints.xa, cellMidpoints.ya, cellMidpoints.xb, cellMidpoints.yb);
+                break;
+            case 2:
+                /* BC */
+                line(cellMidpoints.xb, cellMidpoints.yb, cellMidpoints.xc, cellMidpoints.yc);
+                break;
+            case 3:
+                /* CD */
+                line(cellMidpoints.xc, cellMidpoints.yc, cellMidpoints.xd, cellMidpoints.yd);
+                break;
+        }
+    }
+};
+
+
+function getCellStatus(col, row) {
+    // return the cell corners as a 4 bit number as string
+    let out = '';
+    out += str( field_bool[getIndex(col, row)] ); //up left corner
+    out += str( field_bool[getIndex(col+1, row)] ); //up right corner
+    out += str( field_bool[getIndex(col+1, row+1)] ); //down right corner
+    out += str( field_bool[getIndex(col, row+1)] ); //down left corner
+    return out;
+};
+
+
+function getCellCenter(col, row) {
+    return [(col + 0.5) * cellSize, (row + 0.5) * cellSize];
+};
+
+
+function getIndex(col, row) {
+    return col + row * cols;
+};
