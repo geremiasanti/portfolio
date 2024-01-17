@@ -51,7 +51,9 @@ let resolution,
     pointSize,
     lineSize,
     drawDots, 
-    whichNoise;
+    whichNoise,
+    octaves,
+    fallOff;
 
 // variables
 let t = 0;
@@ -69,15 +71,14 @@ $(document).ready(function() {
     );
 
     setInterval(function() {
-        //console.log(frameRate());
+        console.log(frameRate());
     }, 1000);
 })
 
 
 function setup() {
-    console.log('setup');
     // instantiate params
-    resolution = 120;
+    resolution = 100;
     treshold = .5;
     cellSize = $(window).width() / (resolution - 1);
     cols = resolution;
@@ -110,13 +111,10 @@ function setup() {
         }
     }
 
-    // display and loop only on hover
-    $('.link').hover(() => {
-        loop();
-    }, () => {
-        noLoop();
-    });
-    noLoop();
+    // noise params (see perlin noise)
+    octaves = 4;
+    fallOff = .3;
+    noiseDetail(octaves, fallOff);
 }
 
 
@@ -172,14 +170,8 @@ function populateFields(field_float, field_bool) {
     for(let col = 0; col < cols; col++) {
         for(let row = 0; row < rows; row++) {
             let i = getIndex(col, row);
-            switch(whichNoise) {
-               case 'random':
-                    value = Math.random();
-                    break;
-               case 'p5_noise':
-                    value = noise(xInc * col, yInc * row, zInc * t);
-                    break;
-            }
+
+            value = noise(xInc * col, yInc * row, zInc * t);
             
             field_float[i] = value;
             
