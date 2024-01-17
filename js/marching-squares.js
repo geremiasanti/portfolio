@@ -43,38 +43,48 @@
 
 
 // params 
-let resolution = 100;
-let treshold = 0.65;
-let cellSize = $(window).width() / (resolution - 1);
-let cols = resolution;
-let rows = Math.trunc( $(window).height() / cellSize ) + 2; 
-let pointSize = cellSize * .3;
-let lineSize = cellSize * .15;
-let drawDots = false;
-let whichNoise = 'p5_basic';
+let resolution, 
+    treshold, 
+    cellSize, 
+    cols, 
+    rows, 
+    pointSize,
+    lineSize,
+    drawDots, 
+    whichNoise;
 
 // variables
-let field_float;
-let field_bool;
-let field_midpoints;
 let t = 0;
+let field_float,
+    field_bool,
+    field_midpoints;
 
 
 $(document).ready(function() {
+    setInterval(function() {
+        console.log(frameRate());
+    }, 1000);
     $(window).resize(function() { 
         setup();
         draw();
     });
-    setInterval(function() {
-        console.log(frameRate());
-    }, 1000);
 })
 
 
 function setup() {
+    // instantiate params
+    resolution = 100;
+    treshold = 0.65;
+    cellSize = $(window).width() / (resolution - 1);
+    cols = resolution;
+    rows = Math.trunc( $(window).height() / cellSize ) + 2; 
+    pointSize = cellSize * .3;
+    lineSize = cellSize * .15;
+    drawDots = false;
+    whichNoise = 'p5_basic';
+
     // canvas
     createCanvas($(window).width(), $(window).height(), P2D, document.getElementById('p5canvas'));
-    let cellSize = $(window).width() / (resolution - 1);
     
     // fields 
     field_float = new Float32Array(cols * rows);
