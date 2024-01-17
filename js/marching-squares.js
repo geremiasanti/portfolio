@@ -61,27 +61,31 @@ let field_float,
 
 
 $(document).ready(function() {
+    $(window).resize(
+        debounce(function() { 
+            setup();
+            draw();
+        })
+    );
+
     setInterval(function() {
-        console.log(frameRate());
+        //console.log(frameRate());
     }, 1000);
-    $(window).resize(function() { 
-        setup();
-        draw();
-    });
 })
 
 
 function setup() {
+    console.log('setup');
     // instantiate params
-    resolution = 100;
-    treshold = 0.65;
+    resolution = 120;
+    treshold = .5;
     cellSize = $(window).width() / (resolution - 1);
     cols = resolution;
     rows = Math.trunc( $(window).height() / cellSize ) + 2; 
     pointSize = cellSize * .3;
     lineSize = cellSize * .15;
     drawDots = false;
-    whichNoise = 'p5_basic';
+    whichNoise = 'p5_noise';
 
     // canvas
     createCanvas($(window).width(), $(window).height(), P2D, document.getElementById('p5canvas'));
@@ -172,7 +176,7 @@ function populateFields(field_float, field_bool) {
                case 'random':
                     value = Math.random();
                     break;
-               case 'p5_basic':
+               case 'p5_noise':
                     value = noise(xInc * col, yInc * row, zInc * t);
                     break;
             }
@@ -284,3 +288,14 @@ function getCellCenter(col, row) {
 function getIndex(col, row) {
     return col + row * cols;
 };
+
+
+function debounce(callback, wait = 100) {
+  let timeoutId = null;
+  return (...args) => {
+    window.clearTimeout(timeoutId);
+    timeoutId = window.setTimeout(() => {
+      callback(...args);
+    }, wait);
+  };
+}
