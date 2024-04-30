@@ -53,7 +53,9 @@ let resolution,
     drawDots, 
     whichNoise,
     octaves,
-    fallOff;
+    fallOff,
+    backgroundColor
+;
 
 // variables
 let t = 0;
@@ -63,13 +65,23 @@ let field_float,
 
 
 $(document).ready(function() {
+    // handle resize
     $(window).resize(
         debounce(function() { 
             setup();
-            draw();
         })
     );
 
+    // initial theme
+    backgroundColor = 'white';
+    // on hover turn dark
+    $('.link').mouseenter(() => {
+        backgroundColor = '#121212';    
+    }).mouseleave(() => {
+        backgroundColor = 'white';    
+    });
+
+    // check performance
     setInterval(function() {
         console.log(frameRate());
     }, 1000);
@@ -88,9 +100,6 @@ function setup() {
     drawDots = false;
     whichNoise = 'p5_noise';
 
-    // canvas
-    createCanvas($(window).width(), $(window).height(), P2D, document.getElementById('p5canvas'));
-    
     // fields 
     field_float = new Float32Array(cols * rows);
     field_bool = new Int8Array(cols * rows);
@@ -115,13 +124,23 @@ function setup() {
     octaves = 4;
     fallOff = .3;
     noiseDetail(octaves, fallOff);
+
+
+    // canvas
+    createCanvas($(window).width(), $(window).height(), P2D, document.getElementById('p5canvas'));
 }
 
 
+
 function draw() {                      
+    // maintanance
     clear();
     t++;
-    
+
+    // background
+    background(backgroundColor);
+
+    // values into 2d Arrays
     [field_float, field_bool] = populateFields(field_float, field_bool);
 
     // main loop, processes every cell
@@ -283,11 +302,14 @@ function getIndex(col, row) {
 
 
 function debounce(callback, wait = 100) {
-  let timeoutId = null;
-  return (...args) => {
-    window.clearTimeout(timeoutId);
-    timeoutId = window.setTimeout(() => {
-      callback(...args);
-    }, wait);
-  };
+    // last timeout id
+    let timeoutId = null;
+    return (...args) => {
+        // on input clear previous timeout
+        window.clearTimeout(timeoutId);
+        // set new timeout
+        timeoutId = window.setTimeout(() => {
+            callback(...args);
+        }, wait);
+    };
 }
