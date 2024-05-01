@@ -41,6 +41,10 @@
         indexes.
 */
 
+// const
+const baseBackgroundColor = '#FF671F';
+const hoverBackgroundColor = '#121212';
+const contentColor = '#FFFFFF';
 
 // params 
 let resolution, 
@@ -63,7 +67,6 @@ let field_float,
     field_bool,
     field_midpoints;
 
-
 $(document).ready(function() {
     // handle resize
     $(window).resize(
@@ -72,14 +75,14 @@ $(document).ready(function() {
         })
     );
 
-    // initial theme
-    backgroundColor = 'white';
     // on hover turn dark
     $('.link').mouseenter(() => {
-        backgroundColor = '#121212';    
+        backgroundColor = hoverBackgroundColor;    
+        $('.link').removeClass('text-saffron').addClass('text-black');
     }).mouseleave(() => {
-        backgroundColor = 'white';    
-    });
+        backgroundColor = baseBackgroundColor;    
+        $('.link').removeClass('text-black').addClass('text-saffron');
+    }).mouseleave();
 
     // check performance
     setInterval(function() {
@@ -173,7 +176,7 @@ function draw() {
             }
             
             // lines
-            stroke(0);
+            stroke('contentColor');
             strokeWeight(lineSize); 
             drawLines(col, row, field_midpoints[col][row]);
         }

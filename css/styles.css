@@ -1,7 +1,10 @@
 /* FONT */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
 * {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 800;
+    font-style: italic;
 }
 
 html, body {
@@ -11,18 +14,24 @@ html, body {
 #p5canvas {
     position: absolute;
     top: 0;
-}
-
-.invert-colors {
-    color: white;
-    mix-blend-mode: difference;
+    z-index: -1;
 }
 
 .title {
     font-size: 8vw;
+    color: white;
 }
 
 .link {
     font-size: 5vw;
-    color: white;
+    background-color: white;
+    text-decoration: none;
+}
+
+.text-saffron {
+    color: #FF671F;
+}
+
+.text-black {
+    color: #FF671F;
 }

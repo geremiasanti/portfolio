@@ -323,7 +323,7 @@ function draw() {
             }
             
             if(getDrawLines()) {
-                stroke(0);
+                stroke(contentColor);
                 strokeWeight(getLineSize()); 
                 drawLines(col, row, field_midpoints_copy[col][row]);
             }
