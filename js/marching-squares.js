@@ -86,8 +86,7 @@ $(document).ready(function() {
 
     // check performance
     setInterval(function() {
-        //console.log(frameRate());
-        console.log(rows, cols);
+        console.log(frameRate());
     }, 1000);
 })
 
