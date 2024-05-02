@@ -96,18 +96,21 @@ $(document).ready(function() {
 
 
 function setup() {
+    let windowWidth = $(window).outerWidth();
+    let windowHeight = $(window).outerHeight();
+
     // instantiate params
     resolution = 150;
     treshold = .5;
     
-    if($(window).width() > $(window).height()) {
-        cellSize = $(window).width() / (resolution - 1);
+    if(windowWidth > windowHeight) {
+        cellSize = windowWidth / (resolution - 1);
         cols = resolution;
-        rows = Math.trunc( $(window).height() / cellSize ) + 2; 
+        rows = Math.trunc(windowHeight / cellSize) + 2; 
     } else {
-        cellSize = $(window).height() / (resolution - 1);
+        cellSize = windowHeight / (resolution - 1);
         rows = resolution;
-        cols = Math.trunc( $(window).width() / cellSize ) + 2; 
+        cols = Math.trunc(windowWidth / cellSize) + 2; 
     }
 
     pointSize = cellSize * .3;
@@ -144,7 +147,7 @@ function setup() {
     noiseDetail(octaves, fallOff);
 
     // canvas
-    createCanvas($(window).outerWidth(), $(window).height(), P2D, document.getElementById('p5canvas'));
+    createCanvas(windowWidth, windowHeight, P2D, document.getElementById('p5canvas'));
 }
 
 
