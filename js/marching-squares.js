@@ -86,7 +86,8 @@ $(document).ready(function() {
 
     // check performance
     setInterval(function() {
-        console.log(frameRate());
+        //console.log(frameRate());
+        console.log(rows, cols);
     }, 1000);
 })
 
@@ -95,9 +96,17 @@ function setup() {
     // instantiate params
     resolution = 100;
     treshold = .5;
-    cellSize = $(window).width() / (resolution - 1);
-    cols = resolution;
-    rows = Math.trunc( $(window).height() / cellSize ) + 2; 
+    
+    if($(window).width() > $(window).height()) {
+        cellSize = $(window).width() / (resolution - 1);
+        cols = resolution;
+        rows = Math.trunc( $(window).height() / cellSize ) + 2; 
+    } else {
+        cellSize = $(window).height() / (resolution - 1);
+        rows = resolution;
+        cols = Math.trunc( $(window).width() / cellSize ) + 2; 
+    }
+
     pointSize = cellSize * .3;
     lineSize = cellSize * .15;
     drawDots = false;
