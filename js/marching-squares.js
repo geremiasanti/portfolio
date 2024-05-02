@@ -136,9 +136,8 @@ function setup() {
     fallOff = .3;
     noiseDetail(octaves, fallOff);
 
-
     // canvas
-    createCanvas($(window).width(), $(window).height(), P2D, document.getElementById('p5canvas'));
+    createCanvas($(window).outerWidth(), $(window).height(), P2D, document.getElementById('p5canvas'));
 }
 
 
