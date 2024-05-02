@@ -42,9 +42,10 @@
 */
 
 // const
-const baseBackgroundColor = '#FF671F';
-const hoverBackgroundColor = '#121212';
-const contentColor = '#FFFFFF';
+const firstBackgroundColor = '#FC580A';
+const secondBackgroundColor = '#121212';
+const firstContentColor = '#FADEC8';
+const secondContentColor = '#2F4858';
 const baseFrameRate = 25;
 
 // params 
@@ -59,8 +60,8 @@ let resolution,
     whichNoise,
     octaves,
     fallOff,
-    backgroundColor
-;
+    backgroundColor,
+    contentColor;
 
 // variables
 let t = 0;
@@ -78,10 +79,12 @@ $(document).ready(function() {
 
     // on hover turn dark
     $('.link').mouseenter(() => {
-        backgroundColor = hoverBackgroundColor;    
+        backgroundColor = secondBackgroundColor;    
+        contentColor = secondContentColor;    
         $('.link').removeClass('text-saffron').addClass('text-black');
     }).mouseleave(() => {
-        backgroundColor = baseBackgroundColor;    
+        backgroundColor = firstBackgroundColor;    
+        contentColor = firstContentColor;    
         $('.link').removeClass('text-black').addClass('text-saffron');
     }).mouseleave();
 
@@ -94,7 +97,7 @@ $(document).ready(function() {
 
 function setup() {
     // instantiate params
-    resolution = 100;
+    resolution = 150;
     treshold = .5;
     
     if($(window).width() > $(window).height()) {
@@ -187,7 +190,7 @@ function draw() {
             }
             
             // lines
-            stroke('contentColor');
+            stroke(contentColor);
             strokeWeight(lineSize); 
             drawLines(col, row, field_midpoints[col][row]);
         }

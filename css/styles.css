@@ -19,12 +19,12 @@ html, body {
 
 .title {
     font-size: 8vw;
-    color: white;
+    color: #FFE7D4;
 }
 
 .link {
     font-size: 5vw;
-    background-color: white;
+    background-color: #FFE7D4;
     text-decoration: none;
 }
 
