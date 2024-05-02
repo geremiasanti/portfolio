@@ -45,6 +45,7 @@
 const baseBackgroundColor = '#FF671F';
 const hoverBackgroundColor = '#121212';
 const contentColor = '#FFFFFF';
+const baseFrameRate = 25;
 
 // params 
 let resolution, 
@@ -107,7 +108,7 @@ function setup() {
     }
 
     pointSize = cellSize * .3;
-    lineSize = cellSize * .15;
+    lineSize = cellSize * .2;
     drawDots = false;
     whichNoise = 'p5_noise';
 
@@ -131,9 +132,12 @@ function setup() {
         }
     }
 
+    // limiting framerate
+    frameRate(baseFrameRate);
+
     // noise params (see perlin noise)
     octaves = 4;
-    fallOff = .3;
+    fallOff = .25;
     noiseDetail(octaves, fallOff);
 
     // canvas
@@ -199,9 +203,21 @@ function populateFields(field_float, field_bool) {
     for(let col = 0; col < cols; col++) {
         for(let row = 0; row < rows; row++) {
             let i = getIndex(col, row);
-
             value = noise(xInc * col, yInc * row, zInc * t);
-            
+
+            // mouse shit
+            cellCenterPx = getCellCenter(col, row); 
+            mouseCellDistance = dist(
+                mouseX + 10, mouseY + 10, 
+                cellCenterPx[0], cellCenterPx[1]
+            );
+
+            if(mouseCellDistance < 130) {
+                value += .3;
+            } else if(mouseCellDistance < 200) {
+                value += .15;
+            }
+
             field_float[i] = value;
             
             if(value >= treshold) {
@@ -210,15 +226,6 @@ function populateFields(field_float, field_bool) {
                 field_bool[i] = 0;
             }
 
-            // mouse shit
-            if(true) {
-                cellCenterPx = getCellCenter(col, row); 
-                mouseCellDistance = dist(mouseX, mouseY, cellCenterPx[0], cellCenterPx[1]);
-                    if(mouseCellDistance < 100) {
-                    field_float[i] = 1;
-                    field_bool[i] = 1;
-                }
-            }
         }
     }
     return [field_float, field_bool];
