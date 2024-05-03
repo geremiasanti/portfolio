@@ -46,7 +46,9 @@ const firstBackgroundColor = '#FC580A';
 const secondBackgroundColor = '#121212';
 const firstContentColor = '#f6c8a2';
 const secondContentColor = '#2F4858';
-const baseFrameRate = 25;
+const startingResolution = 100;
+const minFrameRate = 20;
+const maxFrameRate = 30;
 
 // params 
 let resolution, 
@@ -90,19 +92,19 @@ $(document).ready(function() {
 
     // log performance
     setInterval(function() {
-        console.log(frameRate());
+        console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
     }, 1000);
 })
 
 
-function setup() {
+function setup(newResolution = startingResolution, newCanvas = true) {
+    resolution = newResolution;
+
     let windowWidth = $(window).outerWidth();
     let windowHeight = $(window).outerHeight();
 
     // instantiate params
-    resolution = 150;
     treshold = .5;
-    
     if(windowWidth > windowHeight) {
         cellSize = windowWidth / (resolution - 1);
         cols = resolution;
@@ -138,16 +140,13 @@ function setup() {
         }
     }
 
-    // limiting framerate
-    frameRate(baseFrameRate);
-
     // noise params (see perlin noise)
     octaves = 4;
     fallOff = .25;
     noiseDetail(octaves, fallOff);
 
-    // canvas
-    createCanvas(windowWidth, windowHeight, P2D, document.getElementById('p5canvas'));
+    if(newCanvas)
+        createCanvas(windowWidth, windowHeight, P2D, document.getElementById('p5canvas'));
 }
 
 
@@ -196,6 +195,15 @@ function draw() {
             stroke(contentColor);
             strokeWeight(lineSize); 
             drawLines(col, row, field_midpoints[col][row]);
+        }
+    }
+
+    // change resolution if needed
+    if(frameCount % 10 == 0 && frameCount > 0) {
+        if(frameRate() < minFrameRate) {
+            setup(resolution - 10, false);
+        } else if (frameRate() > maxFrameRate) {
+            setup(resolution + 10, false);
         }
     }
 } 
