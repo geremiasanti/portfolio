@@ -88,7 +88,7 @@ $(document).ready(function() {
         $('.link').removeClass('text-black').addClass('text-saffron');
     }).mouseleave();
 
-    // check performance
+    // log performance
     setInterval(function() {
         console.log(frameRate());
     }, 1000);
