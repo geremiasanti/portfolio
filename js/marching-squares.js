@@ -44,7 +44,7 @@
 // const
 const firstBackgroundColor = '#FC580A';
 const secondBackgroundColor = '#121212';
-const firstContentColor = '#FADEC8';
+const firstContentColor = '#f6c8a2';
 const secondContentColor = '#2F4858';
 const baseFrameRate = 25;
 
