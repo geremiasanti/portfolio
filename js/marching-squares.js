@@ -206,27 +206,29 @@ function populateFields(field_float, field_bool) {
     let xInc = 0.1;
     let yInc = 0.1;
     let zInc = 0.1;
+
+    let frameNoiseValue = noise(t * .15);
     for(let col = 0; col < cols; col++) {
         for(let row = 0; row < rows; row++) {
             let i = getIndex(col, row);
-            value = noise(xInc * col, yInc * row, zInc * t);
+            cellNoiseValue = noise(xInc * col, yInc * row, zInc * t);
 
-            // mouse shit
+            // mouse sphere
             cellCenterPx = getCellCenter(col, row); 
             mouseCellDistance = dist(
                 mouseX + 10, mouseY + 10, 
                 cellCenterPx[0], cellCenterPx[1]
             );
 
-            if(mouseCellDistance < 130) {
-                value += .3;
-            } else if(mouseCellDistance < 200) {
-                value += .15;
+            if(mouseCellDistance < 250 * frameNoiseValue) {
+                cellNoiseValue += .3;
+            } else if(mouseCellDistance < 500 * frameNoiseValue) {
+                cellNoiseValue += .15;
             }
 
-            field_float[i] = value;
+            field_float[i] = cellNoiseValue;
             
-            if(value >= treshold) {
+            if(cellNoiseValue >= treshold) {
                 field_bool[i] = 1;
             } else {
                 field_bool[i] = 0;
