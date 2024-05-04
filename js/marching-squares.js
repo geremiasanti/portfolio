@@ -12,13 +12,13 @@
 
     Now I can draw a pattern inside the cell, the choice of pattern is based on 
         a rule. The most common one (I don't know if others exist) is to set a 
-        treshold, then the pattern will have to be positioned in such a way that 
+        threshold, then the pattern will have to be positioned in such a way that 
         it divides the corners that have a value higher than the trashold from 
-        the other (which will have a value less than or equal to the treshold). 
+        the other (which will have a value less than or equal to the threshold). 
     The only thing the observer will see are the lines that connect the corners, 
         which will not be drawn. The edges are not going to be drawn either. 
     Some examples of the different ways a single cell can be rendered (with
-        treshold=5):
+        threshold=5):
 
         4------2   7------2   7------2   7------6
         |______|   |  |   |   |    \ |   |      |
@@ -41,18 +41,19 @@
         indexes.
 */
 
-// const
+// consts
 const firstBackgroundColor = '#FC580A';
 const secondBackgroundColor = '#121212';
-const firstContentColor = '#f6c8a2';
+const firstContentColor = '#F6C8A2';
 const secondContentColor = '#2F4858';
 const startingResolution = 100;
 const minFrameRate = 20;
 const maxFrameRate = 30;
+const fieldBufferSize = 15;
 
 // params 
 let resolution, 
-    treshold, 
+    threshold, 
     cellSize, 
     cols, 
     rows, 
@@ -66,10 +67,9 @@ let resolution,
     contentColor;
 
 // variables
+let fieldMidpoints;
+let fieldBuffer = new Array();
 let t = 0;
-let field_float,
-    field_bool,
-    field_midpoints;
 
 $(document).ready(function() {
     // handle resize
@@ -92,7 +92,8 @@ $(document).ready(function() {
 
     // monitoring
     setInterval(function() {
-        console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
+        // TEMP
+        //console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
     }, 1000);
 })
 
@@ -102,7 +103,7 @@ function setup(newResolution = startingResolution, newCanvas = true) {
     let windowHeight = $(window).outerHeight();
 
     // instantiate params
-    treshold = .5;
+    threshold = .5;
     resolution = newResolution;
     if(windowWidth > windowHeight) {
         cellSize = windowWidth / (resolution - 1);
@@ -119,12 +120,8 @@ function setup(newResolution = startingResolution, newCanvas = true) {
     drawDots = false;
     whichNoise = 'p5_noise';
 
-    // fields 
-    field_float = new Float32Array(cols * rows);
-    field_bool = new Int8Array(cols * rows);
-
     // calculating every cell's midpoints positions
-    field_midpoints = Array(cols).fill().map(() => Array(rows));
+    fieldMidpoints = Array(cols).fill().map(() => Array(rows));
     for(let col = 0; col < cols; col++) {
         for(let row = 0; row < rows; row++) {
             let xa = (col + 0.5) * cellSize; 
@@ -135,7 +132,7 @@ function setup(newResolution = startingResolution, newCanvas = true) {
             let yc = (row + 1) * cellSize;
             let xd = col * cellSize;
             let yd = (row + 0.5) * cellSize;
-            field_midpoints[col][row] = {xa: xa, ya: ya, xb: xb, yb: yb, xc: xc, yc: yc, xd: xd, yd: yd};
+            fieldMidpoints[col][row] = {xa: xa, ya: ya, xb: xb, yb: yb, xc: xc, yc: yc, xd: xd, yd: yd};
         }
     }
 
@@ -146,11 +143,24 @@ function setup(newResolution = startingResolution, newCanvas = true) {
 
     if(newCanvas)
         createCanvas(windowWidth, windowHeight, P2D, document.getElementById('p5canvas'));
+
+    // worker
+    let populateFieldWorker = new Worker('./js/populateFieldWorker.js');
+    // calling worker 
+    executePopulateFieldWorker(populateFieldWorker);
+    /* TEMP
+    setInterval(function() { 
+        executePopulateFieldWorker(populateFieldWorker);
+    }, 3000); 
+    */
+    // handling worker response
+    populateFieldWorker.onmessage = (response) => {
+        console.log(response.data);   
+    };
 }
 
 
-
-function draw() {                      
+function draw() {
     // maintanance
     clear();
     t++;
@@ -159,14 +169,13 @@ function draw() {
     background(backgroundColor);
 
     // values into 2d Arrays
-    [field_float, field_bool] = populateFields(field_float, field_bool);
+    let field = populateField();
 
     // main loop, processes every cell
     for(let col = 0; col < cols; col++) {
         for(let row = 0; row < rows; row++) {
             let i = getIndex(col, row);
-            let cellValue_float = field_float[i];
-            let cellValue_bool = field_bool[i];
+            let cellValue_bool = field[i];
 
             if(drawDots) {
                 strokeWeight(pointSize);
@@ -193,11 +202,12 @@ function draw() {
             // lines
             stroke(contentColor);
             strokeWeight(lineSize); 
-            drawLines(col, row, field_midpoints[col][row]);
+            drawLines(col, row, fieldMidpoints[col][row]);
         }
     }
 
     // adjust resolution if needed
+    /* TEMP
     if(frameCount % 10 == 0 && frameCount > 0) {
         if(frameRate() < minFrameRate) {
             setup(resolution - 10, false);
@@ -205,10 +215,26 @@ function draw() {
             setup(resolution + 10, false);
         }
     }
+    */
+
+    noLoop();
 } 
 
+function executePopulateFieldWorker(populateFieldWorker) {
+    for(let tFuture = t + 1; tFuture < t + 10; tFuture++) {
+        populateFieldWorker.postMessage({
+            t: tFuture,
+            cols: cols,
+            rows: rows,
+            threshold: threshold,
+        });
+    }
+}
+
 // put new values in the fields
-function populateFields(field_float, field_bool) {
+function populateField() {
+    field = new Int8Array(cols * rows);
+
     let value, cellCenterPx, mouseCellDistance; 
     let xInc = 0.1;
     let yInc = 0.1;
@@ -233,17 +259,15 @@ function populateFields(field_float, field_bool) {
                 cellNoiseValue += .15;
             }
 
-            field_float[i] = cellNoiseValue;
-            
-            if(cellNoiseValue >= treshold) {
-                field_bool[i] = 1;
+            if(cellNoiseValue >= threshold) {
+                field[i] = 1;
             } else {
-                field_bool[i] = 0;
+                field[i] = 0;
             }
 
         }
     }
-    return [field_float, field_bool];
+    return field;
 };
 
 
@@ -315,10 +339,10 @@ function drawLines(col, row, cellMidpoints) {
 function getCellStatus(col, row) {
     // return the cell corners as a 4 bit number as string
     let out = '';
-    out += str( field_bool[getIndex(col, row)] ); //up left corner
-    out += str( field_bool[getIndex(col+1, row)] ); //up right corner
-    out += str( field_bool[getIndex(col+1, row+1)] ); //down right corner
-    out += str( field_bool[getIndex(col, row+1)] ); //down left corner
+    out += str( field[getIndex(col, row)] ); //up left corner
+    out += str( field[getIndex(col+1, row)] ); //up right corner
+    out += str( field[getIndex(col+1, row+1)] ); //down right corner
+    out += str( field[getIndex(col, row+1)] ); //down left corner
     return out;
 };
 
