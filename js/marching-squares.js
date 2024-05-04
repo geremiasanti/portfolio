@@ -90,7 +90,7 @@ $(document).ready(function() {
         $('.link').removeClass('text-black').addClass('text-saffron');
     }).mouseleave();
 
-    // log performance
+    // monitoring
     setInterval(function() {
         console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
     }, 1000);
@@ -98,13 +98,12 @@ $(document).ready(function() {
 
 
 function setup(newResolution = startingResolution, newCanvas = true) {
-    resolution = newResolution;
-
     let windowWidth = $(window).outerWidth();
     let windowHeight = $(window).outerHeight();
 
     // instantiate params
     treshold = .5;
+    resolution = newResolution;
     if(windowWidth > windowHeight) {
         cellSize = windowWidth / (resolution - 1);
         cols = resolution;
@@ -198,7 +197,7 @@ function draw() {
         }
     }
 
-    // change resolution if needed
+    // adjust resolution if needed
     if(frameCount % 10 == 0 && frameCount > 0) {
         if(frameRate() < minFrameRate) {
             setup(resolution - 10, false);
