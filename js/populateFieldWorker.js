@@ -31,13 +31,13 @@ function populateField(t, cols, rows, threshold) {
                 mouseX + 10, mouseY + 10, 
                 cellCenterPx[0], cellCenterPx[1]
             );
-            */
 
             if(mouseCellDistance < 250 * frameNoiseValue) {
                 cellNoiseValue += .3;
             } else if(mouseCellDistance < 500 * frameNoiseValue) {
                 cellNoiseValue += .15;
             }
+            */
 
             if(cellNoiseValue >= threshold) {
                 field[i] = 1;
@@ -58,7 +58,7 @@ const PERLIN_ZWRAPB = 8;
 const PERLIN_ZWRAP = 1 << PERLIN_ZWRAPB;
 const PERLIN_SIZE = 4095;
 let perlin_octaves = 4; // default to medium smooth
-let perlin_amp_falloff = 0.5; // 50% reduction/octave
+let perlin_amp_falloff = 0.25; // 50% reduction/octave
 const scaled_cosine = i => 0.5 * (1.0 - Math.cos(i * Math.PI));
 let perlin; // will be initialized lazily by noise() or noiseSeed()
 function noise(x, y = 0, z = 0) {

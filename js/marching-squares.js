@@ -41,6 +41,7 @@
         indexes.
 */
 
+
 // consts
 const firstBackgroundColor = '#FC580A';
 const secondBackgroundColor = '#121212';
@@ -50,6 +51,10 @@ const startingResolution = 100;
 const minFrameRate = 20;
 const maxFrameRate = 30;
 const fieldBufferSize = 15;
+const workersAmount = 10;
+const minFieldBufferSize = 5;
+const populateFieldWorker = new Worker('./js/populateFieldWorker.js');
+
 
 // params 
 let resolution, 
@@ -66,10 +71,13 @@ let resolution,
     backgroundColor,
     contentColor;
 
+
 // variables
-let fieldMidpoints;
+let fieldMidpoints,
+    field;
 let fieldBuffer = new Array();
 let t = 0;
+
 
 $(document).ready(function() {
     // handle resize
@@ -92,8 +100,7 @@ $(document).ready(function() {
 
     // monitoring
     setInterval(function() {
-        // TEMP
-        //console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
+        console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
     }, 1000);
 })
 
@@ -136,26 +143,15 @@ function setup(newResolution = startingResolution, newCanvas = true) {
         }
     }
 
-    // noise params (see perlin noise)
-    octaves = 4;
-    fallOff = .25;
-    noiseDetail(octaves, fallOff);
-
     if(newCanvas)
         createCanvas(windowWidth, windowHeight, P2D, document.getElementById('p5canvas'));
 
-    // worker
-    let populateFieldWorker = new Worker('./js/populateFieldWorker.js');
-    // calling worker 
+    // calling worker the first time
     executePopulateFieldWorker(populateFieldWorker);
-    /* TEMP
-    setInterval(function() { 
-        executePopulateFieldWorker(populateFieldWorker);
-    }, 3000); 
-    */
-    // handling worker response
+    // worker response handler
     populateFieldWorker.onmessage = (response) => {
-        console.log(response.data);   
+        fieldBuffer.push(response.data);
+        fieldBuffer.sort((a,b) => (a.t < b.t) ? 1 : -1);
     };
 }
 
@@ -163,13 +159,21 @@ function setup(newResolution = startingResolution, newCanvas = true) {
 function draw() {
     // maintanance
     clear();
-    t++;
 
     // background
     background(backgroundColor);
 
-    // values into 2d Arrays
-    let field = populateField();
+    // get next field of values, if any present
+    if(fieldBuffer.length < minFieldBufferSize) {
+        executePopulateFieldWorker(populateFieldWorker);
+    }
+
+    if(fieldBuffer.length > 0) {
+        field = fieldBuffer.pop().field;
+    } 
+    if(typeof field === "undefined") {
+        return;
+    }
 
     // main loop, processes every cell
     for(let col = 0; col < cols; col++) {
@@ -207,68 +211,30 @@ function draw() {
     }
 
     // adjust resolution if needed
-    /* TEMP
-    if(frameCount % 10 == 0 && frameCount > 0) {
+    if(frameCount % 100 == 0 && frameCount > 0) {
         if(frameRate() < minFrameRate) {
             setup(resolution - 10, false);
         } else if (frameRate() > maxFrameRate) {
             setup(resolution + 10, false);
         }
+        t -= fieldBuffer.length;
+        fieldBuffer = [];
+        executePopulateFieldWorker(populateFieldWorker)
     }
-    */
-
-    noLoop();
 } 
 
+
 function executePopulateFieldWorker(populateFieldWorker) {
-    for(let tFuture = t + 1; tFuture < t + 10; tFuture++) {
+    for(let i = 0; i < workersAmount; i++) {
+        t++
         populateFieldWorker.postMessage({
-            t: tFuture,
+            t: t,
             cols: cols,
             rows: rows,
             threshold: threshold,
         });
     }
 }
-
-// put new values in the fields
-function populateField() {
-    field = new Int8Array(cols * rows);
-
-    let value, cellCenterPx, mouseCellDistance; 
-    let xInc = 0.1;
-    let yInc = 0.1;
-    let zInc = 0.1;
-
-    let frameNoiseValue = noise(t * .15);
-    for(let col = 0; col < cols; col++) {
-        for(let row = 0; row < rows; row++) {
-            let i = getIndex(col, row);
-            cellNoiseValue = noise(xInc * col, yInc * row, zInc * t);
-
-            // mouse sphere
-            cellCenterPx = getCellCenter(col, row); 
-            mouseCellDistance = dist(
-                mouseX + 10, mouseY + 10, 
-                cellCenterPx[0], cellCenterPx[1]
-            );
-
-            if(mouseCellDistance < 250 * frameNoiseValue) {
-                cellNoiseValue += .3;
-            } else if(mouseCellDistance < 500 * frameNoiseValue) {
-                cellNoiseValue += .15;
-            }
-
-            if(cellNoiseValue >= threshold) {
-                field[i] = 1;
-            } else {
-                field[i] = 0;
-            }
-
-        }
-    }
-    return field;
-};
 
 
 function drawLines(col, row, cellMidpoints) {
