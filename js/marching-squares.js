@@ -198,6 +198,8 @@ function draw() {
             drawLines(col, row, fieldMidpoints[col][row]);
         }
     }
+
+    noLoop();
 } 
 
 
@@ -287,11 +289,6 @@ function getCellStatus(col, row) {
     out += str( field[getIndex(col+1, row+1)] ); //down right corner
     out += str( field[getIndex(col, row+1)] ); //down left corner
     return out;
-};
-
-
-function getCellCenter(col, row) {
-    return [(col + 0.5) * cellSize, (row + 0.5) * cellSize];
 };
 
 
