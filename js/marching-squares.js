@@ -62,7 +62,7 @@ let resolution,
     cellSize, 
     cols, 
     rows, 
-    pointSize,
+    basePointSize,
     lineSize,
     backgroundColor,
     contentColor;
@@ -72,7 +72,8 @@ let resolution,
 let t = 0;
 let fieldMidpoints,
     fieldBuffer,
-    field;
+    fieldBool,
+    fieldFloat;
 
 
 $(document).ready(function() {
@@ -118,7 +119,7 @@ function setup(newResolution = startingResolution, newCanvas = true) {
         cols = Math.trunc(windowWidth / cellSize) + 2; 
     }
 
-    pointSize = cellSize * .3;
+    basePointSize = cellSize * 7;
     lineSize = cellSize * .2;
 
     // calculating every cell's midpoints positions
@@ -171,9 +172,11 @@ function draw() {
     }
 
     if(fieldBuffer.length > 0) {
-        field = fieldBuffer.pop().field;
+        fields = fieldBuffer.pop().fields;
+        fieldBool = fields.fieldBool;
+        fieldFloat = fields.fieldFloat;
     } 
-    if(typeof field === "undefined") {
+    if(typeof fieldBool === "undefined") {
         return;
     }
 
@@ -181,10 +184,11 @@ function draw() {
     for(let col = 0; col < cols; col++) {
         for(let row = 0; row < rows; row++) {
             let i = getIndex(col, row);
-            stroke(contentColor);
-            strokeWeight(pointSize);
-            if(field[i])
+
+            if(fieldBool[i]) {
+                strokeWeight(basePointSize * (fieldFloat[i] - threshold));
                 point(col * cellSize, row * cellSize); 
+            }
     
             /* after this I'll put everithing that needs to be done INSIDE the 
                cell (e.g. isolines), because the last row and col of the field 
@@ -196,6 +200,7 @@ function draw() {
             }
             
             // lines
+            stroke(contentColor);
             strokeWeight(lineSize); 
             drawLines(col, row, fieldMidpoints[col][row]);
         }
@@ -284,10 +289,10 @@ function drawLines(col, row, cellMidpoints) {
 function getCellStatus(col, row) {
     // return the cell corners as a 4 bit number as string
     let out = '';
-    out += str( field[getIndex(col, row)] ); //up left corner
-    out += str( field[getIndex(col+1, row)] ); //up right corner
-    out += str( field[getIndex(col+1, row+1)] ); //down right corner
-    out += str( field[getIndex(col, row+1)] ); //down left corner
+    out += str( fieldBool[getIndex(col, row)] ); //up left corner
+    out += str( fieldBool[getIndex(col+1, row)] ); //up right corner
+    out += str( fieldBool[getIndex(col+1, row+1)] ); //down right corner
+    out += str( fieldBool[getIndex(col, row+1)] ); //down left corner
     return out;
 };
 

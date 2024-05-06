@@ -1,7 +1,7 @@
 onmessage = (message) => {
     postMessage({
         t: message.data.t,
-        field: populateField(
+        fields: populateField(
             message.data.t,
             message.data.cols,
             message.data.rows,
@@ -11,43 +11,31 @@ onmessage = (message) => {
 };
 
 function populateField(t, cols, rows, threshold) {
-    field = new Int8Array(cols * rows);
+    fieldFloat = new Float32Array(cols * rows);
+    fieldBool = new Int8Array(cols * rows);
 
     let value, cellCenterPx, mouseCellDistance; 
     let xInc = 0.1;
     let yInc = 0.1;
     let zInc = 0.1;
 
-    let frameNoiseValue = noise(t * .15);
     for(let col = 0; col < cols; col++) {
         for(let row = 0; row < rows; row++) {
             let i = getIndex(cols, col, row);
             cellNoiseValue = noise(xInc * col, yInc * row, zInc * t);
 
-            // mouse sphere
-            /* TEMP
-            cellCenterPx = getCellCenter(col, row); 
-            mouseCellDistance = dist(
-                mouseX + 10, mouseY + 10, 
-                cellCenterPx[0], cellCenterPx[1]
-            );
-
-            if(mouseCellDistance < 250 * frameNoiseValue) {
-                cellNoiseValue += .3;
-            } else if(mouseCellDistance < 500 * frameNoiseValue) {
-                cellNoiseValue += .15;
-            }
-            */
-
+            fieldFloat[i] = cellNoiseValue;
             if(cellNoiseValue >= threshold) {
-                field[i] = 1;
+                fieldBool[i] = 1;
             } else {
-                field[i] = 0;
+                fieldBool[i] = 0;
             }
-
         }
     }
-    return field;
+    return {
+        fieldBool: fieldBool,
+        fieldFloat: fieldFloat,
+    }
 };
 
 // copied from https://github.com/processing/p5.js/blob/v1.9.3/src/math/noise.js
