@@ -48,13 +48,11 @@ const secondBackgroundColor = '#121212';
 const firstContentColor = '#F6C8A2';
 const secondContentColor = '#2F4858';
 const startingResolution = 100;
-const minFrameRate = 20;
-const maxFrameRate = 30;
-const fieldBufferSize = 15;
-const workersAmount = 10;
-const minFieldBufferSize = 5;
+const minFieldBufferSize = 8;
+const workersAmount = 16;
 const populateFieldWorker = new Worker('./js/populateFieldWorker.js');
-
+const framerate = 30;
+const tInc = .3;
 
 // params 
 let resolution, 
@@ -64,19 +62,15 @@ let resolution,
     rows, 
     pointSize,
     lineSize,
-    drawDots, 
-    whichNoise,
-    octaves,
-    fallOff,
     backgroundColor,
     contentColor;
 
 
 // variables
-let fieldMidpoints,
-    field;
-let fieldBuffer = new Array();
 let t = 0;
+let fieldMidpoints,
+    fieldBuffer,
+    field;
 
 
 $(document).ready(function() {
@@ -124,8 +118,6 @@ function setup(newResolution = startingResolution, newCanvas = true) {
 
     pointSize = cellSize * .3;
     lineSize = cellSize * .2;
-    drawDots = false;
-    whichNoise = 'p5_noise';
 
     // calculating every cell's midpoints positions
     fieldMidpoints = Array(cols).fill().map(() => Array(rows));
@@ -146,6 +138,12 @@ function setup(newResolution = startingResolution, newCanvas = true) {
     if(newCanvas)
         createCanvas(windowWidth, windowHeight, P2D, document.getElementById('p5canvas'));
 
+    if(t > 0) {
+        // on resize roll back t
+        t -= fieldBuffer.length * tInc;
+    }
+
+    fieldBuffer = new Array();
     // calling worker the first time
     executePopulateFieldWorker(populateFieldWorker);
     // worker response handler
@@ -153,6 +151,8 @@ function setup(newResolution = startingResolution, newCanvas = true) {
         fieldBuffer.push(response.data);
         fieldBuffer.sort((a,b) => (a.t < b.t) ? 1 : -1);
     };
+
+    frameRate(framerate);
 }
 
 
@@ -179,20 +179,10 @@ function draw() {
     for(let col = 0; col < cols; col++) {
         for(let row = 0; row < rows; row++) {
             let i = getIndex(col, row);
-            let cellValue_bool = field[i];
-
-            if(drawDots) {
-                strokeWeight(pointSize);
-                switch('float') {
-                    case 'bool':
-                        stroke(255 * cellValue_bool);
-                        break;
-                    case 'float':
-                        stroke(Math.trunc(255 * cellValue_float));
-                        break;
-                }
+            stroke(contentColor);
+            strokeWeight(pointSize);
+            if(field[i])
                 point(col * cellSize, row * cellSize); 
-            }
     
             /* after this I'll put everithing that needs to be done INSIDE the 
                cell (e.g. isolines), because the last row and col of the field 
@@ -204,7 +194,6 @@ function draw() {
             }
             
             // lines
-            stroke(contentColor);
             strokeWeight(lineSize); 
             drawLines(col, row, fieldMidpoints[col][row]);
         }
@@ -214,7 +203,7 @@ function draw() {
 
 function executePopulateFieldWorker(populateFieldWorker) {
     for(let i = 0; i < workersAmount; i++) {
-        t++
+        t += tInc;
         populateFieldWorker.postMessage({
             t: t,
             cols: cols,
