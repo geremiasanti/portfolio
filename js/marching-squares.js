@@ -41,6 +41,8 @@
         indexes.
 */
 
+// disables FES
+p5.disableFriendlyErrors = true;
 
 // consts
 const firstBackgroundColor = '#FC580A';
@@ -198,8 +200,6 @@ function draw() {
             drawLines(col, row, fieldMidpoints[col][row]);
         }
     }
-
-    noLoop();
 } 
 
 
