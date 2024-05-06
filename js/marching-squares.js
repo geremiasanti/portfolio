@@ -209,18 +209,6 @@ function draw() {
             drawLines(col, row, fieldMidpoints[col][row]);
         }
     }
-
-    // adjust resolution if needed
-    if(frameCount % 100 == 0 && frameCount > 0) {
-        if(frameRate() < minFrameRate) {
-            setup(resolution - 10, false);
-        } else if (frameRate() > maxFrameRate) {
-            setup(resolution + 10, false);
-        }
-        t -= fieldBuffer.length;
-        fieldBuffer = [];
-        executePopulateFieldWorker(populateFieldWorker)
-    }
 } 
 
 
