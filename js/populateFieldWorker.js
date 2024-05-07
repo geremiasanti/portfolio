@@ -6,11 +6,12 @@ onmessage = (message) => {
             message.data.cols,
             message.data.rows,
             message.data.threshold,
+            message.data.boundsToAvoid,
         )
     });
 };
 
-function populateField(t, cols, rows, threshold) {
+function populateField(t, cols, rows, threshold, boundsToAvoid) {
     fieldFloat = new Float32Array(cols * rows);
     fieldBool = new Int8Array(cols * rows);
 
@@ -22,6 +23,14 @@ function populateField(t, cols, rows, threshold) {
     for(let col = 0; col < cols; col++) {
         for(let row = 0; row < rows; row++) {
             let i = getIndex(cols, col, row);
+
+            // if inside bounds
+            if(col > boundsToAvoid.left && col < boundsToAvoid.right && row > boundsToAvoid.top && row < boundsToAvoid.bottom) {
+                fieldFloat[i] = 0;
+                fieldBool[i] = 0;
+                continue;
+            } 
+            
             cellNoiseValue = noise(xInc * col, yInc * row, zInc * t);
 
             fieldFloat[i] = cellNoiseValue;
@@ -45,8 +54,8 @@ const PERLIN_YWRAP = 1 << PERLIN_YWRAPB;
 const PERLIN_ZWRAPB = 8;
 const PERLIN_ZWRAP = 1 << PERLIN_ZWRAPB;
 const PERLIN_SIZE = 4095;
-let perlin_octaves = 4; // default to medium smooth
-let perlin_amp_falloff = 0.25; // 50% reduction/octave
+let perlin_octaves = 4;
+let perlin_amp_falloff = 0.25;
 const scaled_cosine = i => 0.5 * (1.0 - Math.cos(i * Math.PI));
 let perlin; // will be initialized lazily by noise() or noiseSeed()
 function noise(x, y = 0, z = 0) {

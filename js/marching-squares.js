@@ -41,7 +41,7 @@
         indexes.
 */
 
-// disables FES
+// disables FES (avoid p5 function parameters validating for better performance)
 p5.disableFriendlyErrors = true;
 
 // consts
@@ -49,7 +49,7 @@ const firstBackgroundColor = '#FC580A';
 const secondBackgroundColor = '#121212';
 const firstContentColor = '#F6C8A2';
 const secondContentColor = '#2F4858';
-const startingResolution = 100;
+const startingResolution = 120;
 const minFieldBufferSize = 8;
 const workersAmount = 16;
 const populateFieldWorker = new Worker('./js/populateFieldWorker.js');
@@ -65,8 +65,8 @@ let resolution,
     basePointSize,
     lineSize,
     backgroundColor,
-    contentColor;
-
+    contentColor,
+    boundsToAvoid;
 
 // variables
 let t = 0;
@@ -76,10 +76,10 @@ let fieldMidpoints,
     fieldFloat;
 
 
-$(document).ready(function() {
+$(document).ready(() => {
     // handle resize
     $(window).resize(
-        debounce(function() { 
+        debounce(() => { 
             setup();
         })
     );
@@ -96,7 +96,7 @@ $(document).ready(function() {
     }).mouseleave();
 
     // monitoring
-    setInterval(function() {
+    setInterval(() => {
         console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
     }, 1000);
 })
@@ -105,6 +105,8 @@ $(document).ready(function() {
 function setup(newResolution = startingResolution, newCanvas = true) {
     let windowWidth = $(window).outerWidth();
     let windowHeight = $(window).outerHeight();
+    if(newCanvas)
+        createCanvas(windowWidth, windowHeight, P2D, document.getElementById('p5canvas'));
 
     // instantiate params
     threshold = .5;
@@ -119,8 +121,11 @@ function setup(newResolution = startingResolution, newCanvas = true) {
         cols = Math.trunc(windowWidth / cellSize) + 2; 
     }
 
-    basePointSize = cellSize * 7;
+    basePointSize = cellSize * 8;
     lineSize = cellSize * .2;
+
+    boundsToAvoid = getBoundsToAvoid('.avoid');
+    console.log(boundsToAvoid)
 
     // calculating every cell's midpoints positions
     fieldMidpoints = Array(cols).fill().map(() => Array(rows));
@@ -137,9 +142,6 @@ function setup(newResolution = startingResolution, newCanvas = true) {
             fieldMidpoints[col][row] = {xa: xa, ya: ya, xb: xb, yb: yb, xc: xc, yc: yc, xd: xd, yd: yd};
         }
     }
-
-    if(newCanvas)
-        createCanvas(windowWidth, windowHeight, P2D, document.getElementById('p5canvas'));
 
     if(t > 0) {
         // on resize roll back t
@@ -216,6 +218,7 @@ function executePopulateFieldWorker(populateFieldWorker) {
             cols: cols,
             rows: rows,
             threshold: threshold,
+            boundsToAvoid: boundsToAvoid,
         });
     }
 }
@@ -224,7 +227,7 @@ function executePopulateFieldWorker(populateFieldWorker) {
 function drawLines(col, row, cellMidpoints) {
     let cellStatus = getCellStatus(col, row);
 
-    /* I did the evaluation in this way because:
+    /* I did the evaluation this way because:
        -if there are 0 or 4 ones i don't have to draw nothing
        -if there are 1 or 3 ones i just have to put a single line
            -if there is only 1 one i put the line around that corner 
@@ -286,8 +289,8 @@ function drawLines(col, row, cellMidpoints) {
 };
 
 
+// return the cell corners as a 4 bit number as string
 function getCellStatus(col, row) {
-    // return the cell corners as a 4 bit number as string
     let out = '';
     out += str( fieldBool[getIndex(col, row)] ); //up left corner
     out += str( fieldBool[getIndex(col+1, row)] ); //up right corner
@@ -313,4 +316,40 @@ function debounce(callback, wait = 100) {
             callback(...args);
         }, wait);
     };
+}
+
+
+// returns outer bounds of elements matching selector
+// (in cells, not pixels) 
+function getBoundsToAvoid(selector) {
+    let bounds = {
+        top: $(window).outerHeight(),
+        left: $(window).outerWidth(),
+        bottom: 0,
+        right: 0,
+    };
+
+    $(selector).each(function() {
+        let elementBounds = this.getBoundingClientRect();
+        
+        if(elementBounds.top < bounds.top) {
+            bounds.top = elementBounds.top;
+        }
+        if(elementBounds.left < bounds.left) {
+            bounds.left = elementBounds.left;
+        }
+        if(elementBounds.bottom > bounds.bottom) {
+            bounds.bottom = elementBounds.bottom;
+        }
+        if(elementBounds.right > bounds.right) {
+            bounds.right = elementBounds.right;
+        }
+    }); 
+
+    //convert pixels to cells
+    Object.keys(bounds).forEach((key) => { 
+        bounds[key] = bounds[key] / cellSize; 
+    });
+
+    return bounds
 }
