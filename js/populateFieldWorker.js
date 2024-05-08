@@ -20,16 +20,21 @@ function populateField(t, cols, rows, threshold, boundsToAvoid) {
     let yInc = 0.1;
     let zInc = 0.1;
 
-    for(let col = 0; col < cols; col++) {
-        for(let row = 0; row < rows; row++) {
+    let boundsGroupsAmount = boundsToAvoid.length; 
+
+    col: for(let col = 0; col < cols; col++) {
+        cell: for(let row = 0; row < rows; row++) {
             let i = getIndex(cols, col, row);
 
-            // if inside bounds
-            if(col > boundsToAvoid.left && col < boundsToAvoid.right && row > boundsToAvoid.top && row < boundsToAvoid.bottom) {
-                fieldFloat[i] = 0;
-                fieldBool[i] = 0;
-                continue;
-            } 
+            for(let boundsGroupI = 0; boundsGroupI < boundsGroupsAmount; boundsGroupI++) {
+                let bounds = boundsToAvoid[boundsGroupI]; 
+                // if inside bounds
+                if(col > bounds.left && col < bounds.right && row > bounds.top && row < bounds.bottom) {
+                    fieldFloat[i] = 0;
+                    fieldBool[i] = 0;
+                    continue cell;
+                } 
+            }
             
             cellNoiseValue = noise(xInc * col, yInc * row, zInc * t);
 

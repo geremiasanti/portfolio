@@ -97,7 +97,7 @@ $(document).ready(() => {
 
     // monitoring
     setInterval(() => {
-        console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
+        //console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
     }, 1000);
 })
 
@@ -125,7 +125,6 @@ function setup(newResolution = startingResolution, newCanvas = true) {
     lineSize = cellSize * .2;
 
     boundsToAvoid = getBoundsToAvoid('.avoid');
-    console.log(boundsToAvoid)
 
     // calculating every cell's midpoints positions
     fieldMidpoints = Array(cols).fill().map(() => Array(rows));
@@ -207,8 +206,7 @@ function draw() {
             drawLines(col, row, fieldMidpoints[col][row]);
         }
     }
-} 
-
+}
 
 function executePopulateFieldWorker(populateFieldWorker) {
     for(let i = 0; i < workersAmount; i++) {
@@ -322,33 +320,40 @@ function debounce(callback, wait = 100) {
 // returns outer bounds of elements matching selector
 // (in cells, not pixels) 
 function getBoundsToAvoid(selector) {
-    let bounds = {
-        top: $(window).outerHeight(),
-        left: $(window).outerWidth(),
-        bottom: 0,
-        right: 0,
-    };
+    let bounds = new Array();
 
-    $(selector).each(function() {
+
+    let elements = $(selector).each(function() {
+        let group = parseInt(this.dataset.avoidGroup);
+        if(typeof bounds[group] === 'undefined') {
+            bounds[group] = {
+                top: $(window).outerHeight(),
+                left: $(window).outerWidth(),
+                bottom: 0,
+                right: 0,
+            };
+        }
+
         let elementBounds = this.getBoundingClientRect();
-        
-        if(elementBounds.top < bounds.top) {
-            bounds.top = elementBounds.top;
+        if(elementBounds.top < bounds[group].top) {
+            bounds[group].top = elementBounds.top;
         }
-        if(elementBounds.left < bounds.left) {
-            bounds.left = elementBounds.left;
+        if(elementBounds.left < bounds[group].left) {
+            bounds[group].left = elementBounds.left;
         }
-        if(elementBounds.bottom > bounds.bottom) {
-            bounds.bottom = elementBounds.bottom;
+        if(elementBounds.bottom > bounds[group].bottom) {
+            bounds[group].bottom = elementBounds.bottom;
         }
-        if(elementBounds.right > bounds.right) {
-            bounds.right = elementBounds.right;
+        if(elementBounds.right > bounds[group].right) {
+            bounds[group].right = elementBounds.right;
         }
     }); 
 
     //convert pixels to cells
-    Object.keys(bounds).forEach((key) => { 
-        bounds[key] = bounds[key] / cellSize; 
+    bounds.forEach((groupBounds) => {
+        Object.keys(groupBounds).forEach((side) => { 
+            groupBounds[side] = groupBounds[side] / cellSize; 
+        });
     });
 
     return bounds
