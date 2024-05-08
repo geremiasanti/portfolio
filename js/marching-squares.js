@@ -121,7 +121,7 @@ function setup(newResolution = startingResolution, newCanvas = true) {
         cols = Math.trunc(windowWidth / cellSize) + 2; 
     }
 
-    basePointSize = cellSize * 8;
+    basePointSize = cellSize * 6;
     lineSize = cellSize * .2;
 
     boundsToAvoid = getBoundsToAvoid('.avoid');
@@ -188,7 +188,7 @@ function draw() {
             let i = getIndex(col, row);
 
             if(fieldBool[i]) {
-                strokeWeight(basePointSize * (fieldFloat[i] - threshold));
+                strokeWeight(basePointSize * (fieldFloat[i] - threshold * .93));
                 point(col * cellSize, row * cellSize); 
             }
     
