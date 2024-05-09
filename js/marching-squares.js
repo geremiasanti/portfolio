@@ -96,7 +96,7 @@ $(document).ready(() => {
 
     // monitoring
     setInterval(() => {
-        console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
+        //console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
     }, 1000);
 })
 
@@ -107,8 +107,12 @@ function setup(newCanvas = true) {
     if(newCanvas)
         createCanvas(windowWidth, windowHeight, P2D, document.getElementById('p5canvas'));
 
-    if(isMobile()) 
-        resolution = 50
+    let mobileTest = 'desktop';
+    if(isMobile()) {
+        resolution = 60;
+        mobileTest = 'mobile'
+    }
+    $('.title .text-end span').each(function() {$(this).text(mobileTest)})
 
     // instantiate params
     threshold = .5;
