@@ -107,7 +107,7 @@ function setup(newCanvas = true) {
     if(newCanvas)
         createCanvas(windowWidth, windowHeight, P2D, document.getElementById('p5canvas'));
 
-    let mobileTest = 'desktop1';
+    let mobileTest = navigator.userAgent
     resolution = 120;
     if(isMobile()) {
         resolution = 60;
