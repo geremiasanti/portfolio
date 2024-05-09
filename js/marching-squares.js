@@ -161,12 +161,6 @@ function setup(newResolution = startingResolution, newCanvas = true) {
 
 
 function draw() {
-    // maintanance
-    clear();
-
-    // background
-    background(backgroundColor);
-
     // get next field of values, if any present
     if(fieldBuffer.length < minFieldBufferSize) {
         executePopulateFieldWorker(populateFieldWorker);
@@ -180,6 +174,9 @@ function draw() {
     if(typeof fieldBool === "undefined") {
         return;
     }
+
+    clear();
+    background(backgroundColor);
 
     // main loop, processes every cell
     for(let col = 0; col < cols; col++) {
