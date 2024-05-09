@@ -36,7 +36,7 @@ function populateField(t, cols, rows, threshold, boundsToAvoid) {
                 } 
             }
             
-            cellNoiseValue = noise(xInc * col, yInc * row, zInc * t);
+            cellNoiseValue = noise(4, .3, xInc * col, yInc * row, zInc * t);
 
             fieldFloat[i] = cellNoiseValue;
             if(cellNoiseValue >= threshold) {
@@ -59,11 +59,9 @@ const PERLIN_YWRAP = 1 << PERLIN_YWRAPB;
 const PERLIN_ZWRAPB = 8;
 const PERLIN_ZWRAP = 1 << PERLIN_ZWRAPB;
 const PERLIN_SIZE = 4095;
-let perlin_octaves = 4;
-let perlin_amp_falloff = 0.25;
 const scaled_cosine = i => 0.5 * (1.0 - Math.cos(i * Math.PI));
 let perlin; // will be initialized lazily by noise() or noiseSeed()
-function noise(x, y = 0, z = 0) {
+function noise(perlin_octaves, perlin_amp_falloff, x, y = 0, z = 0) {
     if (perlin == null) {
         perlin = new Array(PERLIN_SIZE + 1);
         for (let i = 0; i < PERLIN_SIZE + 1; i++) {

@@ -206,6 +206,8 @@ function draw() {
             drawLines(col, row, fieldMidpoints[col][row]);
         }
     }
+
+    //noLoop();
 }
 
 function executePopulateFieldWorker(populateFieldWorker) {
@@ -322,7 +324,6 @@ function debounce(callback, wait = 100) {
 function getBoundsToAvoid(selector) {
     let bounds = new Array();
 
-
     let elements = $(selector).each(function() {
         let group = parseInt(this.dataset.avoidGroup);
         if(typeof bounds[group] === 'undefined') {
@@ -349,11 +350,23 @@ function getBoundsToAvoid(selector) {
         }
     }); 
 
-    //convert pixels to cells
     bounds.forEach((groupBounds) => {
-        Object.keys(groupBounds).forEach((side) => { 
-            groupBounds[side] = groupBounds[side] / cellSize; 
-        });
+        let groupHeight = groupBounds.bottom - groupBounds.top;
+        let groupWidth = groupBounds.right - groupBounds.left;
+        let paddingPx = Math.min(groupHeight, groupWidth) * .2; 
+
+        // padding
+        groupBounds.top -= paddingPx;
+        groupBounds.left -= paddingPx;
+        groupBounds.bottom += paddingPx;
+        groupBounds.right += paddingPx;
+
+        // converting from pixels to cells
+        groupBounds.top /= cellSize;
+        groupBounds.left /= cellSize;
+        groupBounds.bottom /= cellSize;
+        groupBounds.right /= cellSize;
+
     });
 
     return bounds
