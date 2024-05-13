@@ -16,8 +16,8 @@ function populateField(t, cols, rows, threshold, boundsToAvoid) {
     fieldBool = new Int8Array(cols * rows);
 
     let value, cellCenterPx, mouseCellDistance; 
-    let xInc = 0.05;
-    let yInc = 0.05;
+    let xInc = 0.03;
+    let yInc = 0.03;
     let zInc = 0.05;
 
     let boundsGroupsAmount = boundsToAvoid.length; 
