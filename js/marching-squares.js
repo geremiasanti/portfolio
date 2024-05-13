@@ -42,7 +42,7 @@
 */
 
 // disables FES (avoid p5 function parameters validating for better performance)
-//p5.disableFriendlyErrors = true;
+p5.disableFriendlyErrors = true;
 
 // consts
 const minFieldBufferSize = 8;
@@ -108,7 +108,7 @@ $(document).ready(() => {
 
     // monitoring
     setInterval(() => {
-        //console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
+        console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
     }, 1000);
 })
 
@@ -122,7 +122,7 @@ function setup(newCanvas = true) {
         createCanvas(windowWidth, windowHeight, P2D, document.getElementById('p5canvas'));
 
     // resolution
-    resolution = 120;
+    resolution = 130;
     if(isMobile) {
         resolution = 80;
     }
