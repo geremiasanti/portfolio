@@ -50,7 +50,7 @@ const workersAmount = 16;
 const populateFieldWorker = new Worker('./js/populateFieldWorker.js');
 const framerate = 30;
 const tInc = .3;
-const bgTransitionInc = .05;
+const bgTransitionInc = .1;
 
 // colors
 let firstBackgroundColor = '#FC580A';
@@ -65,8 +65,6 @@ let threshold,
     rows, 
     basePointSize,
     lineSize,
-    backgroundColor,
-    contentColor,
     boundsToAvoid,
     isMobile,
     resolution;
@@ -77,8 +75,11 @@ let fieldMidpoints,
     fieldBuffer,
     fieldBool,
     fieldFloat;
-let lerpBgIn = false,
+let backgroundColor,
+    contentColor,
+    lerpBgIn = false,
     lerpBgOut = false,
+    startingColor,
     transitionPerc;
 
 
@@ -95,10 +96,14 @@ $(document).ready(() => {
         lerpBgIn = true;
         lerpBgOut = false;
         transitionPerc = 0;
+        startingBackgroundColor = backgroundColor;
+        startingContentColor = contentColor;
     }).mouseleave(() => {
         lerpBgOut = true;
         lerpBgIn = false;
         transitionPerc = 0;
+        startingBackgroundColor = backgroundColor;
+        startingContentColor = contentColor;
     })
 
     // monitoring
@@ -199,8 +204,8 @@ function draw() {
     if(lerpBgIn) {
         transitionPerc += bgTransitionInc;
 
-        backgroundColor = lerpColor(backgroundColor, secondBackgroundColor, transitionPerc)
-        contentColor = lerpColor(contentColor, secondContentColor, transitionPerc)
+        backgroundColor = lerpColor(startingBackgroundColor, secondBackgroundColor, transitionPerc)
+        contentColor = lerpColor(startingContentColor, secondContentColor, transitionPerc)
         
         if(transitionPerc >= 1) 
             lerpBgIn = false;
@@ -208,8 +213,8 @@ function draw() {
     if(lerpBgOut) {
         transitionPerc += bgTransitionInc;
 
-        backgroundColor = lerpColor(backgroundColor, firstBackgroundColor, transitionPerc)
-        contentColor = lerpColor(contentColor, firstContentColor, transitionPerc)
+        backgroundColor = lerpColor(startingBackgroundColor, firstBackgroundColor, transitionPerc)
+        contentColor = lerpColor(startingContentColor, firstContentColor, transitionPerc)
         
         if(transitionPerc >= 1) 
             lerpBgOut = false;
