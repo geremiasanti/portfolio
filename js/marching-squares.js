@@ -42,18 +42,21 @@
 */
 
 // disables FES (avoid p5 function parameters validating for better performance)
-p5.disableFriendlyErrors = true;
+//p5.disableFriendlyErrors = true;
 
 // consts
-const firstBackgroundColor = '#FC580A';
-const secondBackgroundColor = '#121212';
-const firstContentColor = '#F6C8A2';
-const secondContentColor = '#2F4858';
 const minFieldBufferSize = 8;
 const workersAmount = 16;
 const populateFieldWorker = new Worker('./js/populateFieldWorker.js');
 const framerate = 30;
 const tInc = .3;
+const bgTransitionInc = .05;
+
+// colors
+let firstBackgroundColor = '#FC580A';
+let secondBackgroundColor = '#121212';
+let firstContentColor = '#F6C8A2';
+let secondContentColor = '#2F4858';
 
 // params 
 let threshold, 
@@ -74,6 +77,9 @@ let fieldMidpoints,
     fieldBuffer,
     fieldBool,
     fieldFloat;
+let lerpBgIn = false,
+    lerpBgOut = false,
+    transitionPerc;
 
 
 $(document).ready(() => {
@@ -86,18 +92,18 @@ $(document).ready(() => {
 
     // on hover turn dark
     $('.link').mouseenter(() => {
-        backgroundColor = secondBackgroundColor;    
-        contentColor = secondContentColor;    
-        $('.link').removeClass('text-saffron').addClass('text-black');
+        lerpBgIn = true;
+        lerpBgOut = false;
+        transitionPerc = 0;
     }).mouseleave(() => {
-        backgroundColor = firstBackgroundColor;    
-        contentColor = firstContentColor;    
-        $('.link').removeClass('text-black').addClass('text-saffron');
-    }).mouseleave();
+        lerpBgOut = true;
+        lerpBgIn = false;
+        transitionPerc = 0;
+    })
 
     // monitoring
     setInterval(() => {
-        console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
+        //console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
     }, 1000);
 })
 
@@ -149,19 +155,24 @@ function setup(newCanvas = true) {
         }
     }
 
-    if(t > 0) {
-        // on resize roll back t
-        t -= fieldBuffer.length * tInc;
-    }
-
     fieldBuffer = new Array();
+    // on resize roll back t
+    if(t > 0) t -= fieldBuffer.length * tInc;
+
     // calling worker the first time
     executePopulateFieldWorker(populateFieldWorker);
     // worker response handler
     populateFieldWorker.onmessage = (response) => {
         fieldBuffer.push(response.data);
-        fieldBuffer.sort((a,b) => (a.t < b.t) ? 1 : -1);
+        fieldBuffer.sort((a, b) => (a.t < b.t) ? 1 : -1);
     };
+
+    firstBackgroundColor = color('#FC580A');
+    secondBackgroundColor = color('#121212');
+    firstContentColor = color('#F6C8A2');
+    secondContentColor = color('#2F4858');
+    backgroundColor = firstBackgroundColor;
+    contentColor = firstContentColor;
 
     frameRate(framerate);
 }
@@ -183,6 +194,27 @@ function draw() {
     }
 
     clear();
+
+    // background color transition
+    if(lerpBgIn) {
+        transitionPerc += bgTransitionInc;
+
+        backgroundColor = lerpColor(backgroundColor, secondBackgroundColor, transitionPerc)
+        contentColor = lerpColor(contentColor, secondContentColor, transitionPerc)
+        
+        if(transitionPerc >= 1) 
+            lerpBgIn = false;
+    }
+    if(lerpBgOut) {
+        transitionPerc += bgTransitionInc;
+
+        backgroundColor = lerpColor(backgroundColor, firstBackgroundColor, transitionPerc)
+        contentColor = lerpColor(contentColor, firstContentColor, transitionPerc)
+        
+        if(transitionPerc >= 1) 
+            lerpBgOut = false;
+    }
+    // background
     background(backgroundColor);
 
     // main loop, processes every cell

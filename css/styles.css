@@ -3,7 +3,8 @@
 
 * {
     font-family: "JetBrains Mono", monospace;
-    font-weight: 800;
+    font-weight: 700;
+    color: #FFE7D4;
 }
 
 html, body {
@@ -18,20 +19,10 @@ html, body {
 
 .title {
     font-size: 8vw;
-    color: #FFE7D4;
     font-style: italic;
 }
 
 .link {
     font-size: 5vw;
-    background-color: #FFE7D4;
     text-decoration: none;
-}
-
-.text-saffron {
-    color: #FF671F;
-}
-
-.text-black {
-    color: #FF671F;
 }
