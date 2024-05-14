@@ -122,13 +122,11 @@ function setup(newCanvas = true) {
         createCanvas(windowWidth, windowHeight, P2D, document.getElementById('p5canvas'));
 
     // resolution
-    resolution = 130;
+    resolution = 140;
     if(isMobile) {
         resolution = 80;
     }
 
-    // instantiate params
-    threshold = .5;
     if(windowWidth > windowHeight) {
         cellSize = windowWidth / (resolution - 1);
         cols = resolution;
@@ -141,6 +139,8 @@ function setup(newCanvas = true) {
 
     basePointSize = cellSize * 6;
     lineSize = cellSize * .2;
+
+    threshold = .4;
 
     boundsToAvoid = getBoundsToAvoid('.avoid');
 
