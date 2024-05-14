@@ -124,7 +124,7 @@ function setup(newCanvas = true) {
     // resolution
     resolution = 140;
     if(isMobile) {
-        resolution = 80;
+        resolution = 90;
     }
 
     if(windowWidth > windowHeight) {
