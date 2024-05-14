@@ -1,9 +1,8 @@
 /* FONT */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
 
 * {
-    font-family: "JetBrains Mono", monospace;
-    font-weight: 700;
+    font-family: "Titillium Web", sans-serif;
     color: #FFE7D4;
 }
 
@@ -15,14 +14,4 @@ html, body {
     position: absolute;
     top: 0;
     z-index: -1;
-}
-
-.title {
-    font-size: 8vw;
-    font-style: italic;
-}
-
-.link {
-    font-size: 5vw;
-    text-decoration: none;
 }
