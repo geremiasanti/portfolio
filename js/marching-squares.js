@@ -92,7 +92,7 @@ $(document).ready(() => {
     );
 
     // on hover turn dark
-    $('.link').mouseenter(() => {
+    $('.btn-section').mouseenter(() => {
         lerpBgIn = true;
         lerpBgOut = false;
         transitionPerc = 0;
@@ -392,13 +392,14 @@ function getBoundsToAvoid(selector) {
     bounds.forEach((groupBounds) => {
         let groupHeight = groupBounds.bottom - groupBounds.top;
         let groupWidth = groupBounds.right - groupBounds.left;
-        let paddingPx = Math.min(groupHeight, groupWidth) * .2; 
+        let paddingY = Math.min(groupHeight, groupWidth) * .075; 
+        let paddingX = Math.min(groupHeight, groupWidth) * .2; 
 
         // padding
-        groupBounds.top -= paddingPx;
-        groupBounds.left -= paddingPx;
-        groupBounds.bottom += paddingPx;
-        groupBounds.right += paddingPx;
+        groupBounds.top -= paddingY;
+        groupBounds.left -= paddingX;
+        groupBounds.bottom += paddingY;
+        groupBounds.right += paddingX;
 
         // converting from pixels to cells
         groupBounds.top /= cellSize;
