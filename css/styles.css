@@ -10,6 +10,10 @@ html, body {
     height: 100%;
 }
 
+.row.h-90 {
+    height: 90%;
+}
+
 #p5canvas {
     position: absolute;
     top: 0;
