@@ -65,7 +65,6 @@ let threshold,
     rows, 
     basePointSize,
     lineSize,
-    boundsToAvoid,
     isMobile,
     resolution;
 
@@ -82,6 +81,8 @@ let backgroundColor,
     startingColor,
     transitionPerc;
 
+// shared between this script and "user-interface.js"
+var boundsToAvoid;
 
 $(document).ready(() => {
     // handle resize
@@ -415,7 +416,6 @@ function calculateBoundsToAvoid(selector = '.avoid') {
 
     });
 
-    console.log('calculated');
     boundsToAvoid = bounds;
 }
 

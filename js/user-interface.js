@@ -14,9 +14,12 @@ $(document).ready(() => {
         jQuery.easing.def = "easeInExpo";
         $(this).animate(
             { top: `-=${displacePx}px` }, 
-            700,
-            calculateBoundsToAvoid()
+            700
         );
+        setTimeout(() => {
+            $(this).removeClass('avoid');
+            calculateBoundsToAvoid();
+        }, 100)
     });
 });
 
