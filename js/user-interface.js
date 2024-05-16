@@ -24,4 +24,3 @@ function animateSectionBtns() {
         }, i * btnSectionAnimationOffset);
     });
 }
-
