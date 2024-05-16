@@ -55,7 +55,7 @@ const bgTransitionInc = .1;
 // colors
 let firstBackgroundColor = '#FC580A';
 let secondBackgroundColor = '#121212';
-let firstContentColor = '#F6C8A2';
+let firstContentColor = '#F0AB71';
 let secondContentColor = '#2F4858';
 
 // params 
@@ -174,10 +174,10 @@ function setup(newCanvas = true) {
         fieldBuffer.sort((a, b) => (a.t < b.t) ? 1 : -1);
     };
 
-    firstBackgroundColor = color('#FC580A');
-    secondBackgroundColor = color('#121212');
-    firstContentColor = color('#F6C8A2');
-    secondContentColor = color('#2F4858');
+    firstBackgroundColor = color(firstBackgroundColor);
+    secondBackgroundColor = color(secondBackgroundColor);
+    firstContentColor = color(firstContentColor);
+    secondContentColor = color(secondContentColor);
     backgroundColor = firstBackgroundColor;
     contentColor = firstContentColor;
 
