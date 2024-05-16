@@ -1,22 +1,27 @@
 const btnSectionAnimationDurationMs = 500;
 const btnSectionCicleDurationMs = 3500;
-const btnSectionCiclePauseMs = 1500;
+const btnSectionAnimationOffset = btnSectionAnimationDurationMs + 50;
 
 $(document).ready(() => {
-    setInterval(() => {
-        let $sectionBtns = $('.btn-section');
-        let animationOffset = (btnSectionCicleDurationMs - btnSectionCiclePauseMs) / $sectionBtns.length;
+    document.getElementById('p5canvas').addEventListener("firstDrawCompleted", () => {
+        animateSectionBtns();
+        setInterval(animateSectionBtns, btnSectionCicleDurationMs);
+    });;
+});
 
-        $sectionBtns.each(function(i) {
-            // offset animation for each button
+function animateSectionBtns() {
+    let $sectionBtns = $('.btn-section');
+
+    $sectionBtns.each(function(i) {
+        // offset animation for each button
+        setTimeout(() => {
+            // activate animation
+            $(this).addClass('vertical-shaking');
+            // schedule animation deactivation 
             setTimeout(() => {
-                // activate animation
-                $(this).addClass('vertical-shaking');
-                // schedule animation deactivation 
-                setTimeout(() => {
-                    $(this).removeClass('vertical-shaking')
-                }, btnSectionAnimationDurationMs)
-            }, i * animationOffset);
-        });
-    }, btnSectionCicleDurationMs);
-})
+                $(this).removeClass('vertical-shaking')
+            }, btnSectionAnimationDurationMs)
+        }, i * btnSectionAnimationOffset);
+    });
+}
+

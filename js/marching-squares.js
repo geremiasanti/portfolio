@@ -184,6 +184,10 @@ function setup(newCanvas = true) {
 
 
 function draw() {
+    if(frameCount == 2) {
+        document.getElementById('p5canvas').dispatchEvent(new Event('firstDrawCompleted'));
+    } 
+
     // get next field of values, if any present
     if(fieldBuffer.length < minFieldBufferSize) {
         executePopulateFieldWorker(populateFieldWorker);
