@@ -36,7 +36,10 @@ html, body {
 }
 
 .vertical-shaking {
-    animation: vertical-shaking 0.5s;
+    animation: vertical-shaking 0.5s infinite;
+}
+.vertical-shaking.off {
+    animation-name: none;
 }
 
 @keyframes vertical-shaking {
