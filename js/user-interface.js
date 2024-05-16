@@ -1,6 +1,6 @@
 const btnSectionAnimationDurationMs = 500;
 const btnSectionCicleDurationMs = 3500;
-const btnSectionAnimationOffset = btnSectionAnimationDurationMs + 50;
+const btnSectionAnimationOffset = btnSectionAnimationDurationMs - 50;
 
 $(document).ready(() => {
     document.getElementById('p5canvas').addEventListener("firstDrawCompleted", () => {
