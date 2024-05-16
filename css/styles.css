@@ -10,8 +10,8 @@ html, body {
     height: 100%;
 }
 
-.row.h-90 {
-    height: 90%;
+.row.h-88 {
+    height: 88%;
 }
 
 #p5canvas {
@@ -39,4 +39,12 @@ html, body {
     50% { transform: translateY(-5px) }
     75% { transform: translateY(5px) }
     100% { transform: translateY(0) }
+}
+
+.navbar * {
+    color: #FFE7D4;
+}
+
+a.svg-wrapper {
+    text-decoration: none;
 }

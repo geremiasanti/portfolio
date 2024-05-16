@@ -27,6 +27,8 @@ function populateField(t, cols, rows, threshold, boundsToAvoid) {
             let i = getIndex(cols, col, row);
 
             for(let boundsGroupI = 0; boundsGroupI < boundsGroupsAmount; boundsGroupI++) {
+                if(typeof boundsToAvoid[boundsGroupI] == 'undefined') continue;
+
                 let bounds = boundsToAvoid[boundsGroupI]; 
                 // if inside bounds
                 if(col > bounds.left && col < bounds.right && row > bounds.top && row < bounds.bottom) {
