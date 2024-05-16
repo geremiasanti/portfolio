@@ -108,7 +108,7 @@ $(document).ready(() => {
 
     // monitoring
     setInterval(() => {
-        console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
+        //console.log(`resolution: ${resolution}, frameRate: ${frameRate()}`);
     }, 1000);
 })
 

@@ -22,4 +22,27 @@ html, body {
     border: none;
     cursor: pointer;
     outline: inherit;
+    border-radius: 5%;
+
+    /*
+    box-shadow: rgba(100, 100, 111, 0.4) 0px 7px 29px 0px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 25px -10px;
+    box-shadow: rgba(50, 50, 93, 0.8) 0px 30px 60px -12px, rgba(0, 0, 0, 0.8) 0px 18px 36px -18px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    box-shadow: rgba(0, 0, 0, 0.8) 0px 25px 50px -12px;
+
+    box-shadow: rgba(240, 46, 170, 0.4) -5px 5px, rgba(240, 46, 170, 0.3) -10px 10px, rgba(240, 46, 170, 0.2) -15px 15px, rgba(240, 46, 170, 0.1) -20px 20px, rgba(240, 46, 170, 0.05) -25px 25px;
+    */
+}
+
+.vertical-shaking {
+    animation: vertical-shaking 0.5s;
+}
+
+@keyframes vertical-shaking {
+  0% { transform: translateY(0) }
+  25% { transform: translateY(5px) }
+  50% { transform: translateY(-5px) }
+  75% { transform: translateY(5px) }
+  100% { transform: translateY(0) }
 }
