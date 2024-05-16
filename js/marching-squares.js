@@ -144,7 +144,7 @@ function setup(newCanvas = true) {
 
     threshold = .4;
 
-    boundsToAvoid = getBoundsToAvoid('.avoid');
+    calculateBoundsToAvoid();
 
     // calculating every cell's midpoints positions
     fieldMidpoints = Array(cols).fill().map(() => Array(rows));
@@ -366,7 +366,7 @@ function debounce(callback, wait = 100) {
 
 // returns outer bounds of elements matching selector
 // (in cells, not pixels) 
-function getBoundsToAvoid(selector) {
+function calculateBoundsToAvoid(selector = '.avoid') {
     let bounds = new Array();
 
     let elements = $(selector).each(function() {
@@ -415,7 +415,8 @@ function getBoundsToAvoid(selector) {
 
     });
 
-    return bounds
+    console.log('calculated');
+    boundsToAvoid = bounds;
 }
 
 // script from http://detectmobilebrowsers.com/

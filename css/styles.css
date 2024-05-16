@@ -27,6 +27,7 @@ html, body {
     cursor: pointer;
     outline: inherit;
     border-radius: 5%;
+    position: relative;
 }
 
 .vertical-shaking {

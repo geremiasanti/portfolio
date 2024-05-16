@@ -3,10 +3,21 @@ const btnSectionCicleDurationMs = 3500;
 const btnSectionAnimationOffset = btnSectionAnimationDurationMs - 50;
 
 $(document).ready(() => {
+    // section button shaking animation
     document.getElementById('p5canvas').addEventListener("firstDrawCompleted", () => {
         animateSectionBtns();
         setInterval(animateSectionBtns, btnSectionCicleDurationMs);
     });;
+
+    $('#btn-demos').click(function() {
+        let displacePx = this.getBoundingClientRect().top + this.offsetHeight;
+        jQuery.easing.def = "easeInExpo";
+        $(this).animate(
+            { top: `-=${displacePx}px` }, 
+            700,
+            calculateBoundsToAvoid()
+        );
+    });
 });
 
 function animateSectionBtns() {
