@@ -49,3 +49,13 @@ html, body {
 a.svg-wrapper {
     text-decoration: none;
 }
+
+.list-group * {
+    background: none;
+    color: #FFE7D4;
+    border-color: #FFE7D4;
+}
+
+#demos-list {
+    left: -100%;
+}

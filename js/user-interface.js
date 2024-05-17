@@ -10,16 +10,30 @@ $(document).ready(() => {
     });;
 
     $('#btn-demos').click(function() {
-        let displacePx = this.getBoundingClientRect().top + this.offsetHeight;
+        let btn = this;
+        let btnRect = btn.getBoundingClientRect();
+        let displacePx = btnRect.top + btn.offsetHeight;
+        let $list = $('#demos-list'); 
+
         jQuery.easing.def = "easeInExpo";
         $(this).animate(
-            { top: `-=${displacePx}px` }, 
+            { 
+                top: `-=${displacePx}px` 
+            }, 
+            700
+        );
+
+        jQuery.easing.def = "easeOutExpo";
+        $list.animate(
+            { 
+                top: btnRect.top, 
+                left: btnRect.left + btn.offsetWidth - $list.width()
+            }, 
             700
         );
         setTimeout(() => {
-            $(this).removeClass('avoid');
             calculateBoundsToAvoid();
-        }, 100)
+        }, 700)
     });
 });
 
