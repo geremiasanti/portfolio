@@ -95,22 +95,17 @@ $(document).ready(() => {
 
     // on hover turn dark
     $('.btn-section').mouseenter(() => {
-        lerpBgIn = true;
-        lerpBgOut = false;
-        transitionPerc = 0;
-        startingBackgroundColor = backgroundColor;
-        startingContentColor = contentColor;
+        bgTransitionIn();
     }).mouseleave(() => {
         if(sectionSelected) return;
-
-        lerpBgOut = true;
-        lerpBgIn = false;
-        transitionPerc = 0;
-        startingBackgroundColor = backgroundColor;
-        startingContentColor = contentColor;
+        bgTransitionOut();
     });
     $('.btn-section').click(() => {
         sectionSelected = true;
+    });
+    $('#demos-list-back-btn').click(() => {
+        sectionSelected = false;
+        bgTransitionOut();
     });
 
     // monitoring
@@ -424,6 +419,25 @@ function calculateBoundsToAvoid(selector = '.avoid') {
 
     boundsToAvoid = bounds;
 }
+
+
+function bgTransitionIn() {
+    lerpBgIn = true;
+    lerpBgOut = false;
+    transitionPerc = 0;
+    startingBackgroundColor = backgroundColor;
+    startingContentColor = contentColor;
+}
+
+
+function bgTransitionOut() {
+    lerpBgOut = true;
+    lerpBgIn = false;
+    transitionPerc = 0;
+    startingBackgroundColor = backgroundColor;
+    startingContentColor = contentColor;
+}
+
 
 // script from http://detectmobilebrowsers.com/
 function detectMobileBrowser(){
