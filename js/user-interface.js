@@ -3,12 +3,13 @@ const btnSectionCicleDurationMs = 3500;
 const btnSectionAnimationOffset = btnSectionAnimationDurationMs - 50;
 
 $(document).ready(() => {
-    // section button shaking animation
+    // section button shaking animation (after p5 canvas loaded)
     document.getElementById('p5canvas').addEventListener('firstDrawCompleted', () => {
         animateSectionBtns();
         setInterval(animateSectionBtns, btnSectionCicleDurationMs);
     });;
 
+    // animate demos list in
     $('#btn-demos').click(function() {
         let animationDuration = 900;
         let btn = this;
@@ -45,6 +46,31 @@ $(document).ready(() => {
             calculateBoundsToAvoid();
         }, animationDuration);
     });
+
+    // animate demos list out
+    $('#demos-list-back-btn').click(() => {
+        let animationDuration = 900;
+        let $list = $('#demos-list'); 
+
+        jQuery.easing.def = 'easeOutExpo';
+
+        $list.animate(
+            { left: `-100%` }, 
+            animationDuration
+        )
+
+        $('#btn-demos').animate(
+            { top: `0px` }, 
+            animationDuration
+        );
+
+
+        setTimeout(() => {
+            $list.find('#demos-list-back-btn').removeClass('avoid');
+            $list.find('.list-group').removeClass('avoid');
+            calculateBoundsToAvoid();
+        }, animationDuration);
+    })
 });
 
 function animateSectionBtns() {
