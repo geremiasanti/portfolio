@@ -29,7 +29,6 @@ $(document).ready(() => {
             animationDuration
         );
 
-
         setTimeout(() => {
             $('#demos-list-back-btn').animate(
                 { now: "+=180" }, 
