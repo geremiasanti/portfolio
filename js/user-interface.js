@@ -10,14 +10,14 @@ $(document).ready(() => {
     });;
 
     $('#btn-demos').click(function() {
+        let animationDuration = 900;
         let btn = this;
         let btnRect = btn.getBoundingClientRect();
         let displacePx = btnRect.top + btn.offsetHeight;
         let $list = $('#demos-list'); 
 
-        let animationDuration = 700;
+        jQuery.easing.def = 'easeOutExpo';
 
-        jQuery.easing.def = 'easeInExpo';
         $(this).animate(
             { 
                 top: `-=${displacePx}px` 
@@ -25,14 +25,27 @@ $(document).ready(() => {
             animationDuration
         );
 
-        jQuery.easing.def = 'easeOutExpo';
+        $list.css('top', `-=${btn.offsetHeight}`);
         $list.animate(
             { 
-                top: btnRect.top, 
                 left: btnRect.left + btn.offsetWidth - $list.width()
             }, 
             animationDuration
         );
+
+
+        setTimeout(() => {
+            $('#demos-list-back-btn').animate(
+                { now: "+=180" }, 
+                {
+                    step: function(now) {
+                        $(this).css('transform', `rotate(${now}deg)`); 
+                    },
+                    duration: animationDuration * 1.2
+                },
+            );
+        }, animationDuration / 2);
+
         setTimeout(() => {
             $list.addClass('avoid');
             calculateBoundsToAvoid();
