@@ -19,17 +19,13 @@ $(document).ready(() => {
         jQuery.easing.def = 'easeOutExpo';
 
         $(this).animate(
-            { 
-                top: `-=${displacePx}px` 
-            }, 
+            { top: `-=${displacePx}px` }, 
             animationDuration
         );
 
         $list.css('top', `-=${btn.offsetHeight}`);
         $list.animate(
-            { 
-                left: btnRect.left + btn.offsetWidth - $list.width()
-            }, 
+            { left: btnRect.left + btn.offsetWidth - $list.width() }, 
             animationDuration
         );
 
@@ -38,9 +34,7 @@ $(document).ready(() => {
             $('#demos-list-back-btn').animate(
                 { now: "+=180" }, 
                 {
-                    step: function(now) {
-                        $(this).css('transform', `rotate(${now}deg)`); 
-                    },
+                    step: function(now) { $(this).css('transform', `rotate(${now}deg)`); },
                     duration: animationDuration * 1.2
                 },
             );
