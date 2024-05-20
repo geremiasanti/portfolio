@@ -201,7 +201,7 @@ function draw() {
         fieldBool = fields.fieldBool;
         fieldFloat = fields.fieldFloat;
     } 
-    if(typeof fieldBool === "undefined") {
+    if(typeof fieldBool === 'undefined') {
         return;
     }
 

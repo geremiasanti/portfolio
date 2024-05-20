@@ -4,7 +4,7 @@ const btnSectionAnimationOffset = btnSectionAnimationDurationMs - 50;
 
 $(document).ready(() => {
     // section button shaking animation
-    document.getElementById('p5canvas').addEventListener("firstDrawCompleted", () => {
+    document.getElementById('p5canvas').addEventListener('firstDrawCompleted', () => {
         animateSectionBtns();
         setInterval(animateSectionBtns, btnSectionCicleDurationMs);
     });;
@@ -15,25 +15,28 @@ $(document).ready(() => {
         let displacePx = btnRect.top + btn.offsetHeight;
         let $list = $('#demos-list'); 
 
-        jQuery.easing.def = "easeInExpo";
+        let animationDuration = 700;
+
+        jQuery.easing.def = 'easeInExpo';
         $(this).animate(
             { 
                 top: `-=${displacePx}px` 
             }, 
-            700
+            animationDuration
         );
 
-        jQuery.easing.def = "easeOutExpo";
+        jQuery.easing.def = 'easeOutExpo';
         $list.animate(
             { 
                 top: btnRect.top, 
                 left: btnRect.left + btn.offsetWidth - $list.width()
             }, 
-            700
+            animationDuration
         );
         setTimeout(() => {
+            $list.addClass('avoid');
             calculateBoundsToAvoid();
-        }, 700)
+        }, animationDuration);
     });
 });
 
