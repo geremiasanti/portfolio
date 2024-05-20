@@ -9,6 +9,9 @@ $(document).ready(() => {
         setInterval(animateSectionBtns, btnSectionCicleDurationMs);
     });;
 
+    // put demos list at the same height of the button (instead of below)
+    $('#demos-list').css('top', `-=${$('#btn-demos')[0].offsetHeight}px`);
+
     // animate demos list in
     $('#btn-demos').click(function() {
         let animationDuration = 900;
@@ -24,7 +27,6 @@ $(document).ready(() => {
             animationDuration
         );
 
-        $list.css('top', `-=${btn.offsetHeight}`);
         $list.animate(
             { left: btnRect.left + btn.offsetWidth - $list.width() }, 
             animationDuration
@@ -64,11 +66,13 @@ $(document).ready(() => {
             animationDuration
         );
 
-
         setTimeout(() => {
             $list.find('#demos-list-back-btn').removeClass('avoid');
             $list.find('.list-group').removeClass('avoid');
             calculateBoundsToAvoid();
+            
+            // revert back button rotation
+            $('#demos-list-back-btn').css('transform', 'rotate(0deg)');
         }, animationDuration);
     })
 });
