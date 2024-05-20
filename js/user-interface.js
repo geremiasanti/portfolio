@@ -47,7 +47,8 @@ $(document).ready(() => {
         }, animationDuration / 2);
 
         setTimeout(() => {
-            $list.addClass('avoid');
+            $list.find('#demos-list-back-btn').addClass('avoid');
+            $list.find('.list-group').addClass('avoid');
             calculateBoundsToAvoid();
         }, animationDuration);
     });
