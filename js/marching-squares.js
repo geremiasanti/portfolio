@@ -79,7 +79,8 @@ let backgroundColor,
     lerpBgIn = false,
     lerpBgOut = false,
     startingColor,
-    transitionPerc;
+    transitionPerc,
+    sectionSelected = false;
 
 // shared between this script and "user-interface.js"
 var boundsToAvoid;
@@ -100,12 +101,17 @@ $(document).ready(() => {
         startingBackgroundColor = backgroundColor;
         startingContentColor = contentColor;
     }).mouseleave(() => {
+        if(sectionSelected) return;
+
         lerpBgOut = true;
         lerpBgIn = false;
         transitionPerc = 0;
         startingBackgroundColor = backgroundColor;
         startingContentColor = contentColor;
-    })
+    });
+    $('.btn-section').click(() => {
+        sectionSelected = true;
+    });
 
     // monitoring
     /*

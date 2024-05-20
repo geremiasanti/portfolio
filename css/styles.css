@@ -56,6 +56,13 @@ a.svg-wrapper {
     border-color: #FFE7D4;
 }
 
+/* TODO
+.list-group .list-group-item {
+    background: none;
+    color: #FFE7D4;
+}
+*/
+
 #demos-list {
     left: -100%;
 }
