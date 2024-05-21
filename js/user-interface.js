@@ -28,10 +28,16 @@ $(document).ready(() => {
         );
 
         $list.animate(
-            { left: btnRect.left + btn.offsetWidth - $list.width() }, 
+            { left: 0, right: 0 }, 
             animationDuration
         );
 
+        setTimeout(() => {
+            $('#btn-resume').animate(
+                { top: `-=${displacePx}px` }, 
+                animationDuration
+            );
+        }, animationDuration / 7);
         setTimeout(() => {
             $('#demos-list-back-btn').animate(
                 { now: "+=180" }, 
@@ -57,14 +63,20 @@ $(document).ready(() => {
         jQuery.easing.def = 'easeOutExpo';
 
         $list.animate(
-            { left: `-100%` }, 
+            { left: '-100%', right: '100%' }, 
             animationDuration
         )
 
-        $('#btn-demos').animate(
+        $('#btn-resume').animate(
             { top: `0px` }, 
             animationDuration
         );
+        setTimeout(() => {
+            $('#btn-demos').animate(
+                { top: `0px` }, 
+                animationDuration
+            );
+        }, animationDuration / 7);
 
         setTimeout(() => {
             $list.find('#demos-list-back-btn').removeClass('avoid');
