@@ -72,7 +72,13 @@ $(document).ready(() => {
             calculateBoundsToAvoid();
             
             // revert back button rotation
-            $('#demos-list-back-btn').css('transform', 'rotate(0deg)');
+            $('#demos-list-back-btn').animate(
+                { now: "-=180" }, 
+                {
+                    step: function(now) { $(this).css('transform', `rotate(${now}deg)`); },
+                    duration: animationDuration * 1.2
+                },
+            );
         }, animationDuration);
     })
 });
