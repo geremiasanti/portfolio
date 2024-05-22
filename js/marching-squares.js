@@ -126,9 +126,9 @@ function setup(newCanvas = true) {
         createCanvas(windowWidth, windowHeight, P2D, document.getElementById('p5canvas'));
 
     // resolution
-    resolution = 140;
+    resolution = 160;
     if(isMobile) {
-        resolution = 90;
+        resolution = 100;
     }
 
     if(windowWidth > windowHeight) {

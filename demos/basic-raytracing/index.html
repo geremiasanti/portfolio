@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <style>
+	@import url('https://fonts.googleapis.com/css2?family=Fira+Mono&family=JetBrains+Mono:wght@300&display=swap');
+	* {
+	    font-family: "Fira Mono", monospace;
+	}
+	.col {
+	    display: inline-block;
+	    padding: 1rem 1rem;
+	    vertical-align: top;
+	}
+    </style>
+    <body>
+	<div>
+	    <h1 style="text-align: center;">Basic raytracing</h1>
+	</div>
+	<div>
+	    <div class="col">
+		<canvas id="canvas" style="border:1px solid black;">
+		    Your browser does not support the HTML canvas tag.
+		</canvas>
+	    </div>
+	    <div class="col">
+		<h3>Camera</h3>
+		<ul>
+		    <li>
+			<label for="camera-x">x:</label>
+			<input type="number" step=".1" class="render-on-change" id="camera-x" value="0">
+		    </li>
+		    <li>
+			<label for="camera-y">y:</label>
+			<input type="number" step=".1" class="render-on-change" id="camera-y" value="0">
+		    </li>
+		    <li>
+			<label for="camera-z">z:</label>
+			<input type="number" step=".1" class="render-on-change" id="camera-z" value="0">
+		    </li>
+		</ul>
+		<h3>Viewport (Projection plane)</h3>
+		<ul>
+		    <li>
+			<label for="viewport-width">width:</label>
+			<input type="number" step=".1" class="render-on-change" id="viewport-width" value="1">
+		    </li>
+		    <li>
+			<label for="viewport-height">height:</label>
+			<input type="number" step=".1" class="render-on-change" id="viewport-height" value="1">
+		    </li>
+		    <li>
+			<label for="viewport-z">z:</label>
+			<input type="number" step=".1" class="render-on-change" id="viewport-z" value="1">
+		    </li>
+		</ul>
+		<h3>Canvas</h3>
+		<ul>
+		    <li>
+			<label for="canvas-width">width:</label>
+			<input type="number" step="1" class="render-on-change" id="canvas-width" value="500">
+		    </li>
+		    <li>
+			<label for="canvas-height">height:</label>
+			<input type="number" step="1" class="render-on-change" id="canvas-height" value="500">
+		    </li>
+		</ul>
+	    </div>
+	    <div class="col">
+		<h3>Red sphere</h3>
+		<ul>
+		    <li>
+			<label for="red-sphere-radius">radius:</label>
+			<input type="number" step=".1" class="render-on-change" id="red-sphere-radius" value="1">
+		    </li>
+		    <li>
+			<label for="red-sphere-x">x:</label>
+			<input type="number" step=".1" class="render-on-change" id="red-sphere-x" value="0">
+		    </li>
+		    <li>
+			<label for="red-sphere-y">y:</label>
+			<input type="number" step=".1" class="render-on-change" id="red-sphere-y" value="-1">
+		    </li>
+		    <li>
+			<label for="red-sphere-z">z:</label>
+			<input type="number" step=".1" class="render-on-change" id="red-sphere-z" value="3">
+		    </li>
+		</ul>
+		<h3>Green sphere</h3>
+		<ul>
+		    <li>
+			<label for="green-sphere-radius">radius:</label>
+			<input type="number" step=".1" class="render-on-change" id="green-sphere-radius" value="1">
+		    </li>
+		    <li>
+			<label for="green-sphere-x">x:</label>
+			<input type="number" step=".1" class="render-on-change" id="green-sphere-x" value="-2">
+		    </li>
+		    <li>
+			<label for="green-sphere-y">y:</label>
+			<input type="number" step=".1" class="render-on-change" id="green-sphere-y" value="0">
+		    </li>
+		    <li>
+			<label for="green-sphere-z">z:</label>
+			<input type="number" step=".1" class="render-on-change" id="green-sphere-z" value="4">
+		    </li>
+		</ul>
+		<h3>Blue sphere</h3>
+		<ul>
+		    <li>
+			<label for="blue-sphere-radius">radius:</label>
+			<input type="number" step=".1" class="render-on-change" id="blue-sphere-radius" value="1">
+		    </li>
+		    <li>
+			<label for="blue-sphere-x">x:</label>
+			<input type="number" step=".1" class="render-on-change" id="blue-sphere-x" value="2">
+		    </li>
+		    <li>
+			<label for="blue-sphere-y">y:</label>
+			<input type="number" step=".1" class="render-on-change" id="blue-sphere-y" value="0">
+		    </li>
+		    <li>
+			<label for="blue-sphere-z">z:</label>
+			<input type="number" step=".1" class="render-on-change" id="blue-sphere-z" value="4">
+		    </li>
+		</ul>
+	    </div>
+	</div>
+	<script src="raytracing.js"></script>
+    </body>
+</html>
