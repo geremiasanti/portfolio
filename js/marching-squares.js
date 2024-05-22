@@ -46,7 +46,7 @@ p5.disableFriendlyErrors = true;
 
 // consts
 const minFieldBufferSize = 8;
-const workersAmount = 16;
+const workersAmount = 8;
 const populateFieldWorker = new Worker('./js/populateFieldWorker.js');
 const framerate = 30;
 const tInc = .3;
