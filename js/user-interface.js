@@ -93,6 +93,12 @@ $(document).ready(() => {
             );
         }, animationDuration);
     })
+
+    /*
+    $('#btn-resume').click({
+         1
+    });
+    */
 });
 
 function animateSectionBtns() {
