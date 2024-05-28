@@ -94,11 +94,40 @@ $(document).ready(() => {
         }, animationDuration);
     })
 
-    /*
-    $('#btn-resume').click({
-         1
+    $('#btn-resume').click(function() {
+        let animationDuration = 900;
+        let btn = this;
+        let btnRect = btn.getBoundingClientRect();
+        let displacePx = btnRect.top + btn.offsetHeight;
+        
+        jQuery.easing.def = 'easeOutExpo';
+
+        $('#resume-div').animate(
+            { left: '50%' },
+            animationDuration * 2
+        );
+
+        $('#title').animate(
+            { top: `-=${displacePx}px` }, 
+            animationDuration
+        );
+
+        setTimeout(() => {
+            $('#btn-demos').animate(
+                { top: `-=${displacePx}px` }, 
+                animationDuration
+            );
+        }, animationDuration / 7);
+
+
+        setTimeout(() => {
+            $(this).animate(
+                { top: `-=${displacePx}px` }, 
+                animationDuration
+            );
+        }, animationDuration / 3.5);
+
     });
-    */
 });
 
 function animateSectionBtns() {

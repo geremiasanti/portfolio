@@ -71,6 +71,11 @@ a.svg-wrapper {
     cursor: pointer;
 }
 
+#resume-div {
+    left: -50%; 
+    transform: translate(-50%, 0%);
+}
+
 .hvr-rotate {
   display: inline-block;
   transform: perspective(1px) translateZ(0);
