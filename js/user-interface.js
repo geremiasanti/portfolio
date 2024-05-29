@@ -53,7 +53,7 @@ $(document).ready(() => {
             $list.find('#demos-list-back-btn').addClass('avoid');
             $list.find('.list-group').addClass('avoid');
             calculateBoundsToAvoid();
-        }, animationDuration);
+        }, animationDuration * 1.5);
     });
 
     // animate demos list out
@@ -95,6 +95,7 @@ $(document).ready(() => {
         }, animationDuration);
     })
 
+    // animate resume in
     $('#btn-resume').click(function() {
         let animationDuration = 900;
         let btn = this;
@@ -146,6 +147,53 @@ $(document).ready(() => {
             calculateBoundsToAvoid();
         }, animationDuration * 2.3);
     });
+
+    // animate resume out
+    $('#resume-back-btn').click(() => {
+        let animationDuration = 900;
+
+        jQuery.easing.def = 'easeOutExpo';
+
+        $('#resume-div').animate(
+            { left: '-50%' },
+            animationDuration
+        );
+
+        $('#btn-resume').animate(
+            { top: `0px` }, 
+            animationDuration * 1.5
+        );
+
+        setTimeout(() => {
+            $('#btn-demos').animate(
+                { top: `0px` }, 
+                animationDuration * 1.3
+            );
+        }, animationDuration / 7);
+
+        setTimeout(() => {
+            $('#title').animate(
+                { top: `0px` }, 
+                animationDuration * 1.2
+            );
+        }, animationDuration / 4);
+
+        setTimeout(() => {
+            $('#resume-controls a').removeClass('avoid');
+            $('#resume-controls span').removeClass('avoid');
+            $('#resume-img').removeClass('avoid');
+            calculateBoundsToAvoid();
+            
+            // revert back button rotation
+            $('#resume-back-btn').animate(
+                { now: "-=180" }, 
+                {
+                    step: function(now) { $(this).css('transform', `rotate(${now}deg)`); },
+                    duration: animationDuration * 1.2
+                },
+            );
+        }, animationDuration * 1.5);
+    })
 });
 
 function animateSectionBtns() {

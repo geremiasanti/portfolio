@@ -107,6 +107,10 @@ $(document).ready(() => {
         sectionSelected = false;
         bgTransitionOut();
     });
+    $('#resume-back-btn').click(() => {
+        sectionSelected = false;
+        bgTransitionOut();
+    });
 
     // monitoring
     /*
