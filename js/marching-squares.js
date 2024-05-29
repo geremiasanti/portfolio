@@ -404,8 +404,8 @@ function calculateBoundsToAvoid(selector = '.avoid') {
         let paddingX = Math.min(groupHeight, groupWidth) * .2; 
 
         // max padding
-        if(paddingY > 60) paddingY = 60;
-        if(paddingX > 60) paddingX = 60;
+        if(paddingY > 30) paddingY = 30;
+        if(paddingX > 30) paddingX = 30;
 
         // padding
         groupBounds.top -= paddingY;

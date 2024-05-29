@@ -140,7 +140,8 @@ $(document).ready(() => {
         }, animationDuration / 2);
 
         setTimeout(() => {
-            $('#resume-controls').addClass('avoid');
+            $('#resume-controls a').addClass('avoid');
+            $('#resume-controls span').addClass('avoid');
             $('#resume-img').addClass('avoid');
             calculateBoundsToAvoid();
         }, animationDuration * 2.3);
