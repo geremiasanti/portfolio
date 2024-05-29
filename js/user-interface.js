@@ -38,6 +38,7 @@ $(document).ready(() => {
                 animationDuration
             );
         }, animationDuration / 7);
+
         setTimeout(() => {
             $('#demos-list-back-btn').animate(
                 { now: "+=180" }, 
@@ -102,15 +103,17 @@ $(document).ready(() => {
         
         jQuery.easing.def = 'easeOutExpo';
 
-        $('#resume-div').animate(
-            { left: '50%' },
-            animationDuration * 2
-        );
-
         $('#title').animate(
             { top: `-=${displacePx}px` }, 
             animationDuration
         );
+
+        setTimeout(() => {
+            $('#resume-div').animate(
+                { left: '50%' },
+                animationDuration * 2
+            );
+        }, animationDuration / 7);
 
         setTimeout(() => {
             $('#btn-demos').animate(
@@ -119,7 +122,6 @@ $(document).ready(() => {
             );
         }, animationDuration / 7);
 
-
         setTimeout(() => {
             $(this).animate(
                 { top: `-=${displacePx}px` }, 
@@ -127,6 +129,21 @@ $(document).ready(() => {
             );
         }, animationDuration / 3.5);
 
+        setTimeout(() => {
+            $('#resume-back-btn').animate(
+                { now: "+=180" }, 
+                {
+                    step: function(now) { $(this).css('transform', `rotate(${now}deg)`); },
+                    duration: animationDuration * 1.2
+                },
+            );
+        }, animationDuration / 2);
+
+        setTimeout(() => {
+            $('#resume-controls').addClass('avoid');
+            $('#resume-img').addClass('avoid');
+            calculateBoundsToAvoid();
+        }, animationDuration * 2.3);
     });
 });
 

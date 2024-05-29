@@ -67,7 +67,7 @@ a.svg-wrapper {
     left: -100%;
 }
 
-#demos-list-back-btn {
+#demos-list-back-btn, #resume-back-btn {
     cursor: pointer;
 }
 
