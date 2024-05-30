@@ -86,3 +86,9 @@ a.svg-wrapper {
   -webkit-transform: rotate(12deg);
   transform: rotate(12deg);
 }
+
+.copied-alert {
+    position: absolute; 
+    transform: translate(-40%, 40%);
+    display: none;
+}

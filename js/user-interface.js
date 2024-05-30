@@ -194,6 +194,15 @@ $(document).ready(() => {
             );
         }, animationDuration * 1.5);
     })
+
+    $('#copy-email-address').click(function() {
+        navigator.clipboard.writeText($(this).data('toCopy')).then(() => {
+            $(".copied-alert").css('display', 'block');
+            setTimeout(() => {
+                $(".copied-alert").fadeOut(1500);
+            }, 1000);
+        });
+    }) 
 });
 
 function animateSectionBtns() {
